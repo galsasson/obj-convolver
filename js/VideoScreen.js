@@ -108,6 +108,14 @@ VideoScreen.prototype.processVideo = function()
 
 	this.processedData = {};
 	var frame = this.readFrame();
+
+	// direct mapping between video and force
+	// console.log(frame.data.length);
+	for (var i=0; i<frame.data.length; i+=4*96)
+	{
+		mappingData[i/(4*96)] = (frame.data[i]+frame.data[i+1]+frame.data[i+2])/3;
+	}
+	//mappingData = frame.data;
 	// console.log(frame.data[0]);
 }
 

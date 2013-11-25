@@ -18,6 +18,9 @@ var room;
 var testObject = {};
 var videoScreen;
 
+// mapping between video and force
+var mappingData = [];
+
 var spotLight;
 var roomSpotLight;
 

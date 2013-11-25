@@ -94,9 +94,9 @@ TestObject2.prototype.extrudeFace = function(index, faces, vertices)
 	extrudedFace.normal = normal;
 	extrudedFace.geo = geo;
 	this.extrusionFaces[index] = extrudedFace;
-	this.particles[index*3] = new Particle(extrudedFace.v1, extrudedFace.v1, extrudedFace.normal);
-	this.particles[index*3+1] = new Particle(extrudedFace.v2, extrudedFace.v2, extrudedFace.normal);
-	this.particles[index*3+2] = new Particle(extrudedFace.v3, extrudedFace.v3, extrudedFace.normal);
+	this.particles.push(new Particle(extrudedFace.v1, extrudedFace.v1, extrudedFace.normal, index*3));
+	this.particles.push(new Particle(extrudedFace.v2, extrudedFace.v2, extrudedFace.normal, index*3+1));
+	this.particles.push(new Particle(extrudedFace.v3, extrudedFace.v3, extrudedFace.normal, index*3+2));
 
 	geo.vertices.push(basev1);
 	geo.vertices.push(basev2);
