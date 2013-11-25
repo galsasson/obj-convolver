@@ -47,8 +47,8 @@ VideoScreen.prototype.createScreen = function(stream)
 
 	// create context to draw the video on
 	this.pCanvas = document.createElement("canvas");
-	this.pCanvas.width = 320;
-	this.pCanvas.height = 240;
+	this.pCanvas.width = 160;
+	this.pCanvas.height = 120;
 	this.pContext = this.pCanvas.getContext("2d");
 
 	// create video material
@@ -87,13 +87,13 @@ function startVideo(stream)
 VideoScreen.prototype.readFrame = function()
 {
   	try {
-   		this.pContext.drawImage(this.video, 0, 0, 320, 240);
+   		this.pContext.drawImage(this.video, 0, 0, this.pCanvas.width, this.pCanvas.height);
   	}
   	catch (e) {
    		return null;
   	}
 
-  	return this.pContext.getImageData(0, 0, 320, 240);
+  	return this.pContext.getImageData(0, 0, this.pCanvas.width, this.pCanvas.height);
 }
 
 VideoScreen.prototype.processVideo = function()
@@ -110,10 +110,12 @@ VideoScreen.prototype.processVideo = function()
 	var frame = this.readFrame();
 
 	// direct mapping between video and force
-	// console.log(frame.data.length);
-	for (var i=0; i<frame.data.length; i+=4*96)
+	var nPixels = frame.width*frame.height;
+	var parToPix = Math.floor(nPixels / nParticles);
+	for (var i=0; i<nParticles; i++)
 	{
-		mappingData[i/(4*96)] = (frame.data[i]+frame.data[i+1]+frame.data[i+2])/3;
+		var pixel = i*parToPix*4;
+		mappingData[i] = (frame.data[pixel]+frame.data[pixel+1]+frame.data[pixel+2])/3;
 	}
 	//mappingData = frame.data;
 	// console.log(frame.data[0]);

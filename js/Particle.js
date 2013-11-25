@@ -12,8 +12,13 @@ function Particle(pos, restPos, dir, mappingIndex)
 
 	this.update = function()
 	{
-		var force = mappingData[this.index]/255*20;
+		var force = mappingData[this.index]/255;
+		if (force)
+		{
+			var vel = this.direction.clone().multiplyScalar(5);
+			this.pos.add(this.direction.clone().multiplyScalar(force/50));
+		}
 
-		this.pos.addVectors(this.restPos, this.direction.clone().multiplyScalar(force));
+//		this.pos.addVectors(this.restPos, this.direction.clone().multiplyScalar(force));
 	}	
 }

@@ -18,7 +18,8 @@ var room;
 var testObject = {};
 var videoScreen;
 
-// mapping between video and force
+// mapping between video and forcePerParticle
+var nParticles = 0;
 var mappingData = [];
 
 var spotLight;

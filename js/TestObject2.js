@@ -2,6 +2,7 @@ TestObject2 = function()
 {
 	this.extrusionFaces = [];
 	this.particles = [];
+	this.shapeParticles = [];
 //	this.extrusionLengths = [];
 	THREE.Object3D.call(this);
 }
@@ -47,10 +48,6 @@ TestObject2.prototype.extrudeTriangles = function(geo)
 	{
 		var geo = this.extrudeFace(i, faces, vertices);
 		var mesh = new THREE.Mesh(geo, resMgr.materials.object);
-
-		//geo.computeFaceNormals();
-
-
 		mesh.castShadow = true;
 		this.add(mesh);
 	}
@@ -66,26 +63,10 @@ TestObject2.prototype.extrudeFace = function(index, faces, vertices)
 
 	var face = faces[index];
 
-
 	var basev1 = vertices[face.a].clone();
 	var basev2 = vertices[face.b].clone();
 	var basev3 = vertices[face.c].clone();
 	var normal = face.normal.clone();
-
-	// dont extrude top and bottom
-	// if (Math.abs(normal.y) > 0.99) {
-	// 	return;
-	// }
-
-	var extrude1 = normal.clone();
-	var extrude2 = normal.clone();
-	var extrude3 = normal.clone();
-
-//	normal.multiplyScalar(Math.random()*1);
-
-//	extrude1.multiplyScalar(Math.random()*2);
-//	extrude2.multiplyScalar(Math.random()*2);
-//	extrude3.multiplyScalar(Math.random()*2);
 
 	var extrudedFace = {};
 	extrudedFace.v1 = basev1.clone();
@@ -97,6 +78,7 @@ TestObject2.prototype.extrudeFace = function(index, faces, vertices)
 	this.particles.push(new Particle(extrudedFace.v1, extrudedFace.v1, extrudedFace.normal, index*3));
 	this.particles.push(new Particle(extrudedFace.v2, extrudedFace.v2, extrudedFace.normal, index*3+1));
 	this.particles.push(new Particle(extrudedFace.v3, extrudedFace.v3, extrudedFace.normal, index*3+2));
+	nParticles += 3;
 
 	geo.vertices.push(basev1);
 	geo.vertices.push(basev2);
