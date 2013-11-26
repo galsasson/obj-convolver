@@ -21,11 +21,15 @@ TestObject2.prototype.init = function()
 
 TestObject2.prototype.update = function()
 {
+	for (var i=0; i<this.shapeParticles.length; i++)
+	{
+		this.shapeParticles[i].update();		
+	}
 	for (var i=0; i<this.particles.length; i++)
 	{
-		this.shapeParticles[i].update();
 		this.particles[i].update();
 	}
+	
 	this.geo.computeFaceNormals();
 	this.geo.computeVertexNormals();
 	this.geo.verticesNeedUpdate = true;
@@ -51,18 +55,18 @@ TestObject2.prototype.extrudeTriangles = function(geo)
 	var vertices = geo.vertices;
 
 	// create shape particles
-	// for (var i=0; i<vertices.length; i++)
-	// {
-	// 	// if the same vertex was already added to a different particle get its index
-	// 	var index=i;
-	// 	var vert = vertices[i];
-	// 	for (var j=0; j<this.shapeParticles.length; j++) {
-	// 		if (equals(vert, this.shapeParticles[j].restPos)) {
-	// 			index = this.shapeParticles[j].index;
-	// 		}
-	// 	}
-	// 	this.shapeParticles.push(new ShapeParticle(vert, vert, vert.clone().normalize(), index));
-	// }
+	for (var i=0; i<vertices.length; i++)
+	{
+		// if the same vertex was already added to a different particle get its index
+		var index=i;
+		var vert = vertices[i];
+		for (var j=0; j<this.shapeParticles.length; j++) {
+			if (equals(vert, this.shapeParticles[j].restPos)) {
+				index = this.shapeParticles[j].index;
+			}
+		}
+		this.shapeParticles.push(new ShapeParticle(vert, vert, vert.clone().normalize(), index));
+	}
 
 	for (var i=0; i<faces.length; i++)
 	{
@@ -97,20 +101,20 @@ TestObject2.prototype.extrudeFace = function(index, faces, vertices)
 	var index1=index*3;
 	var index2=index*3+1;
 	var index3=index*3+2;
-	for (var i=0; i<this.shapeParticles.length; i++) {
-		if (equals(basev1, this.shapeParticles[i].restPos)) {
-			index1 = this.shapeParticles[i].index;
-		}
-		else if (equals(basev2, this.shapeParticles[i].restPos)) {
-			index2 = this.shapeParticles[i].index;
-		}
-		else if (equals(basev3, this.shapeParticles[i].restPos)) {
-			index3 = this.shapeParticles[i].index;
-		}
-	}
-	this.shapeParticles.push(new ShapeParticle(basev1, basev1, basev1.clone().normalize(), index1));
-	this.shapeParticles.push(new ShapeParticle(basev2, basev2, basev2.clone().normalize(), index2));
-	this.shapeParticles.push(new ShapeParticle(basev3, basev3, basev3.clone().normalize(), index3));
+	// for (var i=0; i<this.shapeParticles.length; i++) {
+	// 	if (equals(basev1, this.shapeParticles[i].restPos)) {
+	// 		index1 = this.shapeParticles[i].index;
+	// 	}
+	// 	else if (equals(basev2, this.shapeParticles[i].restPos)) {
+	// 		index2 = this.shapeParticles[i].index;
+	// 	}
+	// 	else if (equals(basev3, this.shapeParticles[i].restPos)) {
+	// 		index3 = this.shapeParticles[i].index;
+	// 	}
+	// }
+	// this.shapeParticles.push(new ShapeParticle(basev1, basev1, basev1.clone().normalize(), index1));
+	// this.shapeParticles.push(new ShapeParticle(basev2, basev2, basev2.clone().normalize(), index2));
+	// this.shapeParticles.push(new ShapeParticle(basev3, basev3, basev3.clone().normalize(), index3));
 
 	var extrudedFace = {};
 	extrudedFace.v1 = basev1.clone();
