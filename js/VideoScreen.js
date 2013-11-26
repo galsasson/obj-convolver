@@ -2,19 +2,20 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
 
 VideoScreen = function()
 {
+	this.prevFrame = null;
 	THREE.Object3D.call(this);
 }
 VideoScreen.prototype = Object.create(THREE.Object3D.prototype);
 
 VideoScreen.prototype.init = function()
 {
-	// screen object
+	// create screen object
 	var geo = new THREE.CubeGeometry( 320, 200, 10, 1, 1, 1);
 	var mesh = new THREE.Mesh(geo, resMgr.materials.screenBack);
 	mesh.position.z -= 5.5;
 	this.add(mesh);
 
-	// screen top and bottom panels
+	// create screen top and bottom panels
 	geo = new THREE.CubeGeometry(320, 4, 2, 1, 1, 1);
 	var topPanel = new THREE.Mesh(geo, resMgr.materials.screenBack);
 	var bottomPanel = topPanel.clone();
@@ -23,7 +24,7 @@ VideoScreen.prototype.init = function()
 	this.add(topPanel);
 	this.add(bottomPanel);
 
-	// right and left panels
+	// create right and left panels
 	geo = new THREE.CubeGeometry(4, 192, 2, 1, 1, 1);
 	var leftPanel = new THREE.Mesh(geo, resMgr.materials.screenBack);
 	var rightPanel = leftPanel.clone();
@@ -32,18 +33,11 @@ VideoScreen.prototype.init = function()
 	this.add(leftPanel);
 	this.add(rightPanel);
 
-	navigator.getUserMedia({audio: true, video: true}, startVideo, this.noVideo);
-}
-
-VideoScreen.prototype.createScreen = function(stream)
-{
-	// init the video object
-	this.stream = stream;
+	// init video object
 	this.video = document.createElement("video");
 	this.video.width = 320;
 	this.video.height = 240;
 	this.video.autoplay = true;
-	this.video.src = URL.createObjectURL(this.stream);
 
 	// create context to draw the video on
 	this.pCanvas = document.createElement("canvas");
@@ -51,15 +45,39 @@ VideoScreen.prototype.createScreen = function(stream)
 	this.pCanvas.height = 120;
 	this.pContext = this.pCanvas.getContext("2d");
 
+	// create screen object
+	this.videoMaterial = resMgr.materials.black;
+	var screenGeo = new THREE.PlaneGeometry( 320, 200, 1, 1 );
+	this.screenMesh = new THREE.Mesh(screenGeo, this.videoMaterial);
+	this.screenMesh.name = "screen_panel";
+	this.add(this.screenMesh);
+}
+
+VideoScreen.prototype.startLiveVideo = function()
+{
+	navigator.getUserMedia({audio: false, video: true}, startVideo, this.noVideo);	
+}
+
+VideoScreen.prototype.playVideo = function(filename)
+{
+	this.video.src = filename;
+	this.startPlayback();
+}
+
+VideoScreen.prototype.startPlayback = function()
+{
+
 	// create video material
 	this.videoTexture = new THREE.Texture(this.video);
 	this.videoMaterial = new THREE.MeshLambertMaterial( {emissive: 0xffffff, map : this.videoTexture} );
 
-	// create screen object
+	// recreate the screen (not sure why, but the video is not rendering if I don't do this)
+	// remove old screen
+	console.log("removing " + this.screenMesh.name);
+	this.remove(this.screenMesh);
 	var screenGeo = new THREE.PlaneGeometry( 320, 200, 1, 1 );
-	var screenMesh = new THREE.Mesh(screenGeo, this.videoMaterial);
-	this.add(screenMesh);
-
+	this.screenMesh = new THREE.Mesh(screenGeo, this.videoMaterial);
+	this.add(this.screenMesh);
 }
 
 VideoScreen.prototype.update = function()
@@ -81,7 +99,9 @@ VideoScreen.prototype.noVideo = function()
 
 function startVideo(stream)
 {
-	videoScreen.createScreen(stream);
+	videoScreen.stream = stream;
+	videoScreen.video.src = URL.createObjectURL(videoScreen.stream);
+	videoScreen.startPlayback();
 }
 
 VideoScreen.prototype.readFrame = function()
@@ -106,19 +126,50 @@ VideoScreen.prototype.processVideo = function()
 		return;
 	}
 
-	this.processedData = {};
 	var frame = this.readFrame();
 
 	// direct mapping between video and force
 	var nPixels = frame.width*frame.height;
 	var parToPix = Math.floor(nPixels / nParticles);
+	var overallDiff = 0;
 	for (var i=0; i<nParticles; i++)
 	{
 		var pixel = i*parToPix*4;
-		mappingData[i] = (frame.data[pixel]+frame.data[pixel+1]+frame.data[pixel+2])/3;
+
+		var r = frame.data[pixel];
+		var g = frame.data[pixel+1];
+		var b = frame.data[pixel+2];
+
+		if (this.prevFrame) 
+		{
+			var pr = this.prevFrame.data[pixel];
+			var pg = this.prevFrame.data[pixel+1];
+			var pb = this.prevFrame.data[pixel+2];
+
+			// Compute the difference of the red, green, and blue values
+			var diffR = Math.abs(r - pr);
+			var diffG = Math.abs(g - pg);
+			var diffB = Math.abs(b - pb);
+
+	      	var diffSum = diffR + diffG + diffB;
+
+			mappingData[i] = diffSum/765;
+			overallDiff += mappingData[i];
+		}
+		else {
+			// first frame
+			mappingData[i] = 0;
+		}
 	}
-	//mappingData = frame.data;
-	// console.log(frame.data[0]);
+
+	if (overallDiff > 500) {
+		console.log("cut");
+		// this might be a cut, don't treat it as movement
+		for (var i=0; i<nParticles; i++)
+		{
+			mappingData[i] = 0;
+		}
+	}
+
+	this.prevFrame = frame;
 }
-
-

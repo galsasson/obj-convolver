@@ -84,7 +84,7 @@ function initSceneLights()
 {
     // Create an ambient and a directional light to show off the object
     // var dirLight = [];
-    var ambLight = new THREE.AmbientLight( 0x444444 ); // soft white light
+    var ambLight = new THREE.AmbientLight( 0x555555 ); // soft white light
     scene.add( ambLight );
 
     spotLight = new THREE.SpotLight(0xffffff, 1);
@@ -137,6 +137,10 @@ function populateScene()
     videoScreen.init();
     videoScreen.position.set(0, 100, -200);
     scene.add(videoScreen);
+
+    //videoScreen.startLiveVideo();
+    //videoScreen.playVideo("videos/bad_romance.mp4");
+
 }
 
 function addGui()
@@ -235,7 +239,25 @@ function onKeyDown(evt)
     console.log(keyCode);
 
     if (keyCode == 32) {
+        if (animating) {
+            videoScreen.video.pause();
+        }
+        else {
+            videoScreen.video.play();
+        }
         animating = !animating;        
+    }
+    else if (keyCode == 49) // 1
+    {
+        videoScreen.startLiveVideo();
+    }
+    else if (keyCode == 50) // 2
+    {
+        videoScreen.playVideo("videos/bad_romance.mp4");
+    }
+    else if (keyCode == 51) // 3
+    {
+        videoScreen.playVideo("videos/xbox_one.mp4");
     }
     else if (keyCode == 69) // 'e'
     {

@@ -10,11 +10,12 @@ ResourceManager.prototype.initMaterials = function()
 	this.materials.white = new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xffffff } );
 	this.materials.lightGray = new THREE.MeshLambertMaterial( { color: 0x888888, ambient: 0x444444 } );
 	this.materials.gray = new THREE.MeshLambertMaterial( { color: 0x444444, ambient: 0x222222 } );
-	this.materials.black = new THREE.MeshLambertMaterial( { color: 0x222222, ambient: 0x111111 } );
+	this.materials.black = new THREE.MeshLambertMaterial( { color: 0x0, ambient: 0x0 } );
 	this.materials.screenBack = new THREE.MeshLambertMaterial( { color: 0x222222, ambient: 0x111111 } );
 
 	this.materials.walls = new THREE.MeshLambertMaterial( { color: 0x777777, ambient: 0x777777 } );
-	this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x030303, specular: 0xc0c0c0, shininess: 25 } );
+	// this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x030303, specular: 0xc0c0c0, shininess: 25 } );
+	this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x050505, specular: 0xc0c0c0, shininess: 25 } );
 	this.materials.object.shading = THREE.FlatShading;
 
 
