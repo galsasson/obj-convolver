@@ -21,9 +21,11 @@ var videoScreen;
 // mapping between video and forcePerParticle
 var nParticles = 0;
 var mappingData = [];
+var shapeMappingData = [];
 
 var spotLight;
 var roomSpotLight;
+var screenLight;
 
 //***************************************************************************//
 // initialize the renderer, scene, camera, and lights                        //
@@ -84,18 +86,28 @@ function initSceneLights()
 {
     // Create an ambient and a directional light to show off the object
     // var dirLight = [];
-    var ambLight = new THREE.AmbientLight( 0x555555 ); // soft white light
+    var ambLight = new THREE.AmbientLight( 0x222222 ); // soft white light
     scene.add( ambLight );
 
-    spotLight = new THREE.SpotLight(0xffffff, 1);
-    spotLight.angle = Math.PI/4;
+    // object spotlight
+    spotLight = new THREE.SpotLight(0xffffff, 0.6);
+    spotLight.angle = Math.PI/2;
     spotLight.exponent = 30;
-    spotLight.position.set(-40, 150, 650);
+    spotLight.position.set(-40, 200, 750);
     spotLight.target.position.set(0, 30, 500);
     spotLight.castShadow = true;
-    spotLight.shadowCameraFar = 500;
-//    spotLight.shadowCameraVisible = true;
+    spotLight.shadowCameraFar = 1000;
+    // spotLight.shadowCameraVisible = true;
     scene.add(spotLight);
+
+    // screen spotlight
+    screenLight = new THREE.SpotLight(0x000000, 1);
+    screenLight.angle = 0.12;
+    screenLight.exponent = 206;
+    screenLight.position.set(0, 361, -1691);
+    screenLight.target.position.set(0, -100, 800);
+    scene.add(screenLight);
+
 
 
     var spot2 = new THREE.SpotLight(0xffffff, 0.2);
@@ -145,14 +157,18 @@ function populateScene()
 
 function addGui()
 {
-/*
     var gui = new dat.GUI();
-    var f1 = gui.addFolder('HEAD GEOMETRY');
-    f1.add(genome, 'headBaseRadius', 5, 35).onChange(onGeometryChanged);
-    var tmpF = f1.addFolder('Head Scale Vector');
-    tmpF.add(genome.headJointsScaleFactor, 'x', 0.7, 1.2).onChange(onGeometryChanged);
-    tmpF.add(genome.headJointsScaleFactor, 'y', 0.7, 1.2).onChange(onGeometryChanged);
-    tmpF.add(genome.headJointsScaleFactor, 'z', 0.7, 1.2).onChange(onGeometryChanged);
+    var f = gui.addFolder('Screen light position');
+    f.add(screenLight.position, 'x', -100, 100);
+    f.add(screenLight.position, 'y', -100, 1000);
+    f.add(screenLight.position, 'z', -5000, 1000);
+    var f2 = gui.addFolder('Screen light target');
+    f2.add(screenLight.target.position, 'x', -100, 100);
+    f2.add(screenLight.target.position, 'y', -100, 1000);
+    f2.add(screenLight.target.position, 'z', -1000, 1000);
+    gui.add(screenLight, 'exponent', 0, 1000);
+    gui.add(screenLight, 'angle', 0, Math.PI/2);
+/*
     var f4 = f1.addFolder('EYE GEOMETRY');
     f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
     f4.add(genome, 'eyeLidRadius', 0, 13).onChange(onGeometryChanged);

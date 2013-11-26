@@ -17,6 +17,11 @@ TestObject2.prototype.init = function()
 	this.extrudeTriangles(this.geo);
 	mesh.castShadow = true;
 	mesh.receiveShadow = false;
+
+	console.log("number of faces in object: " + this.extrusionFaces.length +
+		", number of points: " + this.extrusionFaces.length*3);
+	console.log("number of shape particles: " + this.shapeParticles.length);
+	console.log("number of face particles: " + this.particles.length);
 }
 
 TestObject2.prototype.update = function()
@@ -29,7 +34,7 @@ TestObject2.prototype.update = function()
 	{
 		this.particles[i].update();
 	}
-	
+
 	this.geo.computeFaceNormals();
 	this.geo.computeVertexNormals();
 	this.geo.verticesNeedUpdate = true;
@@ -75,9 +80,6 @@ TestObject2.prototype.extrudeTriangles = function(geo)
 		mesh.castShadow = true;
 		this.add(mesh);
 	}
-
-	console.log("number of faces in object: " + this.extrusionFaces.length +
-		", number of points: " + this.extrusionFaces.length*3);
 
 	for (var i=0; i<this.extrusionFaces.length*3; i++)
 	{
