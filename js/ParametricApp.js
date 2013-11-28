@@ -15,7 +15,7 @@ var keyPressed = [];
 var exporter = {};
 
 var room;
-var testObject = {};
+var testObject = null;
 var videoScreen;
 
 // mapping between video and forcePerParticle
@@ -49,16 +49,17 @@ function onLoad()
     camera = new THREE.PerspectiveCamera( 20, 
         window.innerWidth / window.innerHeight, 1, 10000 );
         
-    camera.position.set(258, 190, 1087);
-    camera.lookAt(-100, 80, 0);
+    camera.position.set(1115, 373, 1282);
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener( 'change', render );
+    // console.log(controls);
+    controls.target.set(154, 115, 337);
 
     // add lights
     initSceneLights();
 
-    // scene specific stuff (add objects)
-    populateScene();
+    // load resources (after all resouces will load, calls populateScene)
+    loadResources(populateScene);
 
     // Add a mouse up handler to toggle the animation
     addInputHandler();
@@ -79,6 +80,13 @@ function onLoad()
 	run();
 }
 
+function loadResources(whenFinished)
+{
+    resMgr = new ResourceManager();
+    resMgr.initMaterials();
+    resMgr.loadResources(whenFinished);
+}
+
 //***************************************************************************//
 // Populate the scene with lights                                            //
 //***************************************************************************//
@@ -90,13 +98,13 @@ function initSceneLights()
     scene.add( ambLight );
 
     // object spotlight
-    spotLight = new THREE.SpotLight(0xffffff, 0.6);
+    spotLight = new THREE.SpotLight(0xFFFFEE, 0.6);
     spotLight.angle = Math.PI/2;
     spotLight.exponent = 30;
-    spotLight.position.set(-40, 200, 750);
-    spotLight.target.position.set(0, 30, 500);
+    spotLight.position.set(-200, 203, 823);
+    spotLight.target.position.set(-98, 82, 522);
     spotLight.castShadow = true;
-    spotLight.shadowCameraFar = 1000;
+    spotLight.shadowCameraFar = 1200;
     // spotLight.shadowCameraVisible = true;
     scene.add(spotLight);
 
@@ -116,14 +124,6 @@ function initSceneLights()
     spot2.position.set(0, 2000, 200);
     spot2.target.position.set(0, 0, 200);
     scene.add(spot2);
-
-    // dirLight[0] = new THREE.DirectionalLight( 0xffffff, 1);
-    // dirLight[0].position.set(0, 1, 1);
-    // dirLight[1] = new THREE.DirectionalLight( 0xbbbbbb, 1);
-    // dirLight[1].position.set(0, -1, -1);
-
-    // scene.add( dirLight[0] );
-    // scene.add( dirLight[1] );
 }
 
 //***************************************************************************//
@@ -131,10 +131,6 @@ function initSceneLights()
 //***************************************************************************//
 function populateScene()
 {
-    resMgr = new ResourceManager();
-
-    // load resources
-    resMgr.initMaterials();
 
     room = new Room();
     room.init();
@@ -142,16 +138,13 @@ function populateScene()
 
     testObject = new TestObject2();
     testObject.init();
-    testObject.position.set(0, 40, 500);
+    testObject.position.set(0, 50, 500);
     scene.add(testObject);
 
     videoScreen = new VideoScreen();
     videoScreen.init();
-    videoScreen.position.set(0, 100, -200);
+    videoScreen.position.set(0, 100, -220);
     scene.add(videoScreen);
-
-    //videoScreen.startLiveVideo();
-    //videoScreen.playVideo("videos/bad_romance.mp4");
 
 }
 
@@ -159,15 +152,15 @@ function addGui()
 {
     var gui = new dat.GUI();
     var f = gui.addFolder('Screen light position');
-    f.add(screenLight.position, 'x', -100, 100);
-    f.add(screenLight.position, 'y', -100, 1000);
-    f.add(screenLight.position, 'z', -5000, 1000);
+    f.add(spotLight.position, 'x', -100, 100);
+    f.add(spotLight.position, 'y', -100, 1000);
+    f.add(spotLight.position, 'z', -5000, 1000);
     var f2 = gui.addFolder('Screen light target');
-    f2.add(screenLight.target.position, 'x', -100, 100);
-    f2.add(screenLight.target.position, 'y', -100, 1000);
-    f2.add(screenLight.target.position, 'z', -1000, 1000);
-    gui.add(screenLight, 'exponent', 0, 1000);
-    gui.add(screenLight, 'angle', 0, Math.PI/2);
+    f2.add(spotLight.target.position, 'x', -100, 100);
+    f2.add(spotLight.target.position, 'y', -100, 1000);
+    f2.add(spotLight.target.position, 'z', -1000, 1000);
+    gui.add(spotLight, 'exponent', 0, 1000);
+    gui.add(spotLight, 'angle', 0, Math.PI/2);
 /*
     var f4 = f1.addFolder('EYE GEOMETRY');
     f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
@@ -210,7 +203,7 @@ function addGui()
 //***************************************************************************//
 // render loop                                                               //
 //***************************************************************************//
-var t= -2 * Math.PI;
+
 function run()
 {
     var deltaMS = clock.getDelta()*1000;
@@ -219,9 +212,16 @@ function run()
 
     if (animating)
     {
-        videoScreen.update();
-        videoScreen.processVideo();
-        testObject.update();
+        if (videoScreen) {
+            videoScreen.update();
+            videoScreen.processVideo();
+        }
+
+        if (testObject) {
+            testObject.update();
+        }
+        // console.log("Position: " + camera.position.x + "x" + camera.position.y + "x" + camera.position.z);
+        // console.log("Target: " + controls.target.x + "x" + controls.target.y + "x" + controls.target.z);
     }
 
     // Ask for another frame
@@ -274,6 +274,22 @@ function onKeyDown(evt)
     else if (keyCode == 51) // 3
     {
         videoScreen.playVideo("videos/xbox_one.mp4");
+    }
+    else if (keyCode == 52) // 4
+    {
+        videoScreen.playVideo("videos/computer_graphics.mp4");
+    }
+    else if (keyCode == 53) // 5
+    {
+        videoScreen.playVideo("videos/macdonalds.mp4");
+    }
+    else if (keyCode == 54) // 6
+    {
+        videoScreen.playVideo("videos/kanye_west.mp4");
+    }
+    else if (keyCode == 55) // 7
+    {
+        videoScreen.playVideo("videos/family.MOV");
     }
     else if (keyCode == 69) // 'e'
     {

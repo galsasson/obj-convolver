@@ -2,6 +2,7 @@
 ResourceManager = function()
 {
 	this.materials = {};
+	// this.models = {};
 }
 ResourceManager.prototype.constructor = ResourceManager;
 
@@ -13,30 +14,63 @@ ResourceManager.prototype.initMaterials = function()
 	this.materials.black = new THREE.MeshLambertMaterial( { color: 0x0, ambient: 0x0 } );
 	this.materials.screenBack = new THREE.MeshLambertMaterial( { color: 0x222222, ambient: 0x111111 } );
 
-	this.materials.walls = new THREE.MeshLambertMaterial( { color: 0x777777, ambient: 0x777777 } );
+	this.materials.walls = new THREE.MeshLambertMaterial( { color: 0x96A9B5, ambient: 0x8598A4 } );
 	// this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x030303, specular: 0xc0c0c0, shininess: 25 } );
 	this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x050505, specular: 0xc0c0c0, shininess: 25 } );
 	this.materials.object.shading = THREE.FlatShading;
 
+//	this.materials.sofa = new THREE.MeshLambertMaterial( { color: 0x85724E, ambient: 0x85724E } );
 
 
-	this.materials.colors = [];
-	for (var i=0; i<16; i++)
-	{
-		var c = new THREE.Color();
-		var ca = new THREE.Color();
+	/* init colors */
+	// this.materials.colors = [];
+	// for (var i=0; i<16; i++)
+	// {
+	// 	var c = new THREE.Color();
+	// 	var ca = new THREE.Color();
 
-		c.setHSL(map(i, 0, 12, 1, 0.5), 0.5, 0.5);
-		ca.setHSL(map(i, 0, 12, 1, 0.5), 0.5, 0.3);
+	// 	c.setHSL(map(i, 0, 12, 1, 0.5), 0.5, 0.5);
+	// 	ca.setHSL(map(i, 0, 12, 1, 0.5), 0.5, 0.3);
 
-		this.materials.colors[i] = new THREE.MeshLambertMaterial( { color: c, ambient: ca } );
-		//this.materials.colors[i] = new THREE.MeshBasicMaterial( { color: c } );
-	}
+	// 	this.materials.colors[i] = new THREE.MeshLambertMaterial( { color: c, ambient: ca } );
+	// 	//this.materials.colors[i] = new THREE.MeshBasicMaterial( { color: c } );
+	// }
 
-	this.materials.basic = new THREE.MeshBasicMaterial( {color:0xdddddd });
+	// this.materials.basic = new THREE.MeshBasicMaterial( {color:0xdddddd });
 
 	// create shader material
 	// this.initShader();
+}
+
+ResourceManager.prototype.loadResources = function(whenFinished)
+{
+	whenFinished();
+
+	return;
+
+    // load sofa
+    // var manager = new THREE.LoadingManager();
+    //             manager.onProgress = function ( item, loaded, total ) {
+
+    //                 console.log( item, loaded, total );
+    //                 if (loaded == total) {
+    //                 	finishedFunc();
+    //                 }
+    //             };
+
+    // var loader = new THREE.OBJLoader(manager);
+    // loader.load("models/sofa.obj", function(object) {
+    //     object.traverse(function (child) {
+    //         if (child instanceof THREE.Mesh) {
+    //         	child.material = resMgr.materials.sofa;
+    //         	child.castShadow = true;
+    //         	child.receiveShadow = true;
+    //         }
+    //     });
+
+    //     resMgr.models.sofa = object;
+    //     resMgr.models.sofa.scale.set(0.1, 0.1, 0.1);
+    // });	
 }
 
 ResourceManager.prototype.initShader = function()

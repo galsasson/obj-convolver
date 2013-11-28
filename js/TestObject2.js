@@ -10,7 +10,7 @@ TestObject2.prototype = Object.create(THREE.Object3D.prototype);
 
 TestObject2.prototype.init = function()
 {
-	this.geo = new THREE.SphereGeometry(20, 20, 20);
+	this.geo = new THREE.SphereGeometry(20, 12, 12);
 	//var geo = new THREE.CylinderGeometry( 20, 20, 50, 30, 30, false);
 	var mesh = new THREE.Mesh(this.geo, resMgr.materials.object);
 	this.add(mesh);
@@ -30,6 +30,7 @@ TestObject2.prototype.update = function()
 	{
 		this.shapeParticles[i].update();		
 	}
+
 	for (var i=0; i<this.particles.length; i++)
 	{
 		this.particles[i].update();

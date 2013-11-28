@@ -15,12 +15,12 @@ function Particle(pos, restPos, dir, mappingIndex)
 	this.update = function()
 	{
 
-		var force = mappingData[this.index]*15;
+		var force = mappingData[this.index]*10;
 		this.vel = force;
 		this.length += this.vel;
 
 		// friction
-		this.length *= 0.85;
+		this.length *= 0.8;
 
 		// // clear the force
 		// mappingData[this.index] = 0;
