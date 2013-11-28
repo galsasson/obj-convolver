@@ -17,7 +17,7 @@ var exporter = {};
 var room;
 var testObject = null;
 var videoScreen = null;
-var remoteControl = null;
+var remote = null;
 
 // mapping between video and forcePerParticle
 var nParticles = 0;
@@ -102,10 +102,10 @@ function initSceneLights()
     spotLight = new THREE.SpotLight(0xFFFFEE, 0.6);
     spotLight.angle = Math.PI/2;
     spotLight.exponent = 30;
-    spotLight.position.set(-200, 203, 823);
+    spotLight.position.set(-200, 337, 1015);
     spotLight.target.position.set(-98, 82, 522);
     spotLight.castShadow = true;
-    spotLight.shadowCameraFar = 1200;
+    spotLight.shadowCameraFar = 1500;
     // spotLight.shadowCameraVisible = true;
     scene.add(spotLight);
 
@@ -139,7 +139,7 @@ function populateScene()
 
     testObject = new TestObject2();
     testObject.init();
-    testObject.position.set(0, 50, 500);
+    testObject.position.set(0, 80, 500);
     scene.add(testObject);
 
     videoScreen = new VideoScreen();
@@ -147,7 +147,10 @@ function populateScene()
     videoScreen.position.set(0, 100, -220);
     scene.add(videoScreen);
 
-
+    remote = new RemoteControl();
+    remote.init();
+    remote.position.set(88, 25, 435);
+    scene.add(remote);
 
 }
 
@@ -155,15 +158,16 @@ function addGui()
 {
     var gui = new dat.GUI();
     var f = gui.addFolder('Screen light position');
-    f.add(spotLight.position, 'x', -100, 100);
+    f.add(spotLight.position, 'x', -200, 200);
     f.add(spotLight.position, 'y', -100, 1000);
-    f.add(spotLight.position, 'z', -5000, 1000);
+    f.add(spotLight.position, 'z', 0, 2000);
     var f2 = gui.addFolder('Screen light target');
     f2.add(spotLight.target.position, 'x', -100, 100);
     f2.add(spotLight.target.position, 'y', -100, 1000);
-    f2.add(spotLight.target.position, 'z', -1000, 1000);
+    f2.add(spotLight.target.position, 'z', 0, 2000);
     gui.add(spotLight, 'exponent', 0, 1000);
     gui.add(spotLight, 'angle', 0, Math.PI/2);
+    gui.add(spotLight, 'shadowCameraFar', 500, 2000);
 /*
     var f4 = f1.addFolder('EYE GEOMETRY');
     f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);

@@ -31,7 +31,7 @@ Room.prototype.init = function()
 	this.add(mesh);
 
 	// stool
-	geo = new THREE.CubeGeometry( 100, 15, 100, 1, 1, 1);
+	geo = new THREE.CubeGeometry( 200, 30, 200, 1, 1, 1);
 	mesh = new THREE.Mesh(geo, resMgr.materials.white);
 	mesh.position.set(0, 8, 500);
 	mesh.castShadow = true;
