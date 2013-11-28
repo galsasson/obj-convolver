@@ -1,17 +1,19 @@
 TestObject2 = function()
 {
+	THREE.Object3D.call(this);
+
 	this.extrusionFaces = [];
 	this.particles = [];
 	this.shapeParticles = [];
-//	this.extrusionLengths = [];
-	THREE.Object3D.call(this);
 }
 TestObject2.prototype = Object.create(THREE.Object3D.prototype);
 
 TestObject2.prototype.init = function()
 {
 	this.geo = new THREE.SphereGeometry(20, 12, 12);
-	//var geo = new THREE.CylinderGeometry( 20, 20, 50, 30, 30, false);
+	// this.geo = new THREE.CylinderGeometry( 20, 20, 50, 30, 30, false);
+	// this.geo = new THREE.CubeGeometry( 20, 20, 20, 12, 12, 12);
+	// this.geo = new THREE.PlaneGeometry( 40, 40, 12, 12 );
 	var mesh = new THREE.Mesh(this.geo, resMgr.materials.object);
 	this.add(mesh);
 	this.extrudeTriangles(this.geo);
@@ -61,17 +63,24 @@ TestObject2.prototype.extrudeTriangles = function(geo)
 	var vertices = geo.vertices;
 
 	// create shape particles
+	var index=0;
 	for (var i=0; i<vertices.length; i++)
 	{
 		// if the same vertex was already added to a different particle get its index
-		var index=i;
 		var vert = vertices[i];
+		var added = false;
 		for (var j=0; j<this.shapeParticles.length; j++) {
 			if (equals(vert, this.shapeParticles[j].restPos)) {
-				index = this.shapeParticles[j].index;
+				this.shapeParticles[j].addVertex(vert);
+				added = true;
+				//index = this.shapeParticles[j].index;
 			}
 		}
-		this.shapeParticles.push(new ShapeParticle(vert, vert, vert.clone().normalize(), index));
+		if (!added) {
+			var par = new ShapeParticle(vert, vert.clone().normalize(), index++);	// (restPos, direction, mapping index)
+			par.addVertex(vert);
+			this.shapeParticles.push(par);
+		}
 	}
 
 	for (var i=0; i<faces.length; i++)
@@ -158,11 +167,13 @@ TestObject2.prototype.extrudeFace = function(index, faces, vertices)
 
 function equals(v1, v2)
 {
-	if (Math.abs(v1.x - v2.x) < 0.01 &&
-		Math.abs(v1.y - v2.y) < 0.01 &&
-		Math.abs(v1.z - v2.z) < 0.01) 
+	if (Math.abs(v1.x - v2.x) < 0.001 &&
+		Math.abs(v1.y - v2.y) < 0.001 &&
+		Math.abs(v1.z - v2.z) < 0.001) {
 		return true;
-
-	return false;
+	}
+	else {
+		return false;
+	}
 }
 

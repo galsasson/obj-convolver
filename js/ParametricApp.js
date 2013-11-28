@@ -16,7 +16,8 @@ var exporter = {};
 
 var room;
 var testObject = null;
-var videoScreen;
+var videoScreen = null;
+var remoteControl = null;
 
 // mapping between video and forcePerParticle
 var nParticles = 0;
@@ -145,6 +146,8 @@ function populateScene()
     videoScreen.init();
     videoScreen.position.set(0, 100, -220);
     scene.add(videoScreen);
+
+
 
 }
 

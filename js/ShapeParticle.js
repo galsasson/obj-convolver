@@ -1,29 +1,27 @@
-function ShapeParticle(pos, restPos, dir, mappingIndex)
+function ShapeParticle(restPos, dir, mappingIndex)
 {
-	this.pos = pos;
 	this.restPos = restPos.clone();
 	this.direction = dir.clone();
 	this.index = mappingIndex;
 	this.displace = 0;
-	this.extraVertex = [];
-
-	this.vel = this.direction.clone().multiplyScalar(0.2);
-
-	var color = 0;
-	var rad = 5;
+	this.vertices = [];
+	shapeMappingData[mappingIndex] = 0;
 
 	this.update = function()
 	{
-		var force = mappingData[this.index];
+		var force = shapeMappingData[this.index];
 
 		this.displace += force*0.4;
 		// this.displace += force*1;
-		this.pos.addVectors(this.restPos, this.direction.clone().multiplyScalar(this.displace));
+		for (var i=0; i<this.vertices.length; i++)
+		{
+			this.vertices[i].addVectors(this.restPos, this.direction.clone().multiplyScalar(this.displace));
+		}
 	}
 
-	this.addExtraVertex = function(revt)
+	this.addVertex = function(vert)
 	{
-		this.extraVertex.push(vert);
+		this.vertices.push(vert);
 	}
 
 	this.isEquals = function(otherPar)
