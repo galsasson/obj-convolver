@@ -2,8 +2,12 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
 
 VideoScreen = function()
 {
-	this.prevFrame = null;
 	THREE.Object3D.call(this);
+
+	this.prevFrame = null;
+	this.led = null;
+	this.on = false;
+	this.source = "videos/bad_romance.mp4";
 }
 VideoScreen.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -17,11 +21,11 @@ VideoScreen.prototype.init = function()
 	this.add(mesh);
 
 	// create screen top and bottom panels
-	geo = new THREE.CubeGeometry(320, 4, 2, 1, 1, 1);
+	geo = new THREE.CubeGeometry(320, 10, 2, 1, 1, 1);
 	var topPanel = new THREE.Mesh(geo, resMgr.materials.screenBack);
 	var bottomPanel = topPanel.clone();
-	topPanel.position.y -= 98;
-	bottomPanel.position.y += 98;
+	topPanel.position.y -= 95;
+	bottomPanel.position.y += 95;
 	this.add(topPanel);
 	this.add(bottomPanel);
 
@@ -33,6 +37,12 @@ VideoScreen.prototype.init = function()
 	rightPanel.position.x += 158;
 	this.add(leftPanel);
 	this.add(rightPanel);
+
+	// create led
+	geo = new THREE.SphereGeometry( 2, 4, 4);
+	this.led = new THREE.Mesh(geo, resMgr.materials.led);
+	this.led.position.set(128, -95, 0);
+	this.add(this.led);
 
 	// init video object
 	this.video = document.createElement("video");
@@ -47,11 +57,53 @@ VideoScreen.prototype.init = function()
 	this.pContext = this.pCanvas.getContext("2d");
 
 	// create screen object
-	this.videoMaterial = resMgr.materials.black;
-	var screenGeo = new THREE.PlaneGeometry( 320, 200, 1, 1 );
-	this.screenMesh = new THREE.Mesh(screenGeo, this.videoMaterial);
-	this.screenMesh.name = "screen_panel";
-	this.add(this.screenMesh);
+//	this.videoMaterial = resMgr.materials.black;
+	this.screenMesh = null;
+	// var screenGeo = new THREE.PlaneGeometry( 320, 200, 1, 1 );
+	// this.screenMesh = new THREE.Mesh(screenGeo, this.videoMaterial);
+	// this.screenMesh.name = "screen_panel";
+	// this.add(this.screenMesh);
+}
+
+VideoScreen.prototype.toggleOn = function()
+{
+	this.on = !this.on;
+	if (this.on) {
+		this.turnOn();
+	}
+	else {
+		this.turnOff();
+	}
+}
+
+VideoScreen.prototype.turnOn = function()
+{
+	this.led.material.emissive = new THREE.Color(0xff4444);
+	this.setVideoSource(this.source);
+}
+
+VideoScreen.prototype.turnOff = function()
+{
+	this.led.material.emissive = new THREE.Color(0x0);
+	this.video.pause();
+	// remove video panel
+	if (this.screenMesh) {
+		this.remove(this.screenMesh);
+	}
+}
+
+VideoScreen.prototype.setVideoSource = function(source)
+{
+	this.source = source;
+	if (this.on) {
+		if (source == "webcam")
+		{
+			this.startLiveVideo();
+		}
+		else {
+			this.playVideo(source);
+		}
+	}
 }
 
 VideoScreen.prototype.startLiveVideo = function()
@@ -74,8 +126,9 @@ VideoScreen.prototype.startPlayback = function()
 
 	// recreate the screen (not sure why, but the video is not rendering if I don't do this)
 	// remove old screen
-	console.log("removing " + this.screenMesh.name);
-	this.remove(this.screenMesh);
+	if (this.screenMesh) {
+		this.remove(this.screenMesh);
+	}
 	var screenGeo = new THREE.PlaneGeometry( 320, 200, 1, 1 );
 	this.screenMesh = new THREE.Mesh(screenGeo, this.videoMaterial);
 	this.add(this.screenMesh);
@@ -196,7 +249,7 @@ VideoScreen.prototype.processVideo = function()
 	      	var diffSum = diffR + diffG + diffB;
 
 			shapeMappingData[i] = diffSum/765;
-			overallDiff += mappingData[i];
+			overallDiff += shapeMappingData[i];
 		}
 		else {
 			// first frame

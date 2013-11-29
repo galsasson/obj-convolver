@@ -10,8 +10,8 @@ TestObject2.prototype = Object.create(THREE.Object3D.prototype);
 
 TestObject2.prototype.init = function()
 {
-	this.geo = new THREE.SphereGeometry(20, 12, 12);
-	// this.geo = new THREE.CylinderGeometry( 20, 20, 50, 30, 30, false);
+	this.geo = new THREE.SphereGeometry(20, 15, 15);
+	// this.geo = new THREE.CylinderGeometry( 20, 20, 50, 18, 18, false);
 	// this.geo = new THREE.CubeGeometry( 20, 20, 20, 12, 12, 12);
 	// this.geo = new THREE.PlaneGeometry( 40, 40, 12, 12 );
 	var mesh = new THREE.Mesh(this.geo, resMgr.materials.object);

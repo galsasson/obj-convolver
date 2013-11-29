@@ -28,6 +28,8 @@ var spotLight;
 var roomSpotLight;
 var screenLight;
 
+var pressedObjects = [];
+
 //***************************************************************************//
 // initialize the renderer, scene, camera, and lights                        //
 //***************************************************************************//
@@ -99,7 +101,7 @@ function initSceneLights()
     scene.add( ambLight );
 
     // object spotlight
-    spotLight = new THREE.SpotLight(0xFFFFEE, 0.6);
+    spotLight = new THREE.SpotLight(0xFFFFEE, 1);
     spotLight.angle = Math.PI/2;
     spotLight.exponent = 30;
     spotLight.position.set(-200, 337, 1015);
@@ -156,18 +158,18 @@ function populateScene()
 
 function addGui()
 {
-    var gui = new dat.GUI();
-    var f = gui.addFolder('Screen light position');
-    f.add(spotLight.position, 'x', -200, 200);
-    f.add(spotLight.position, 'y', -100, 1000);
-    f.add(spotLight.position, 'z', 0, 2000);
-    var f2 = gui.addFolder('Screen light target');
-    f2.add(spotLight.target.position, 'x', -100, 100);
-    f2.add(spotLight.target.position, 'y', -100, 1000);
-    f2.add(spotLight.target.position, 'z', 0, 2000);
-    gui.add(spotLight, 'exponent', 0, 1000);
-    gui.add(spotLight, 'angle', 0, Math.PI/2);
-    gui.add(spotLight, 'shadowCameraFar', 500, 2000);
+    // var gui = new dat.GUI();
+    // var f = gui.addFolder('Screen light position');
+    // f.add(spotLight.position, 'x', -200, 200);
+    // f.add(spotLight.position, 'y', -100, 1000);
+    // f.add(spotLight.position, 'z', 0, 2000);
+    // var f2 = gui.addFolder('Screen light target');
+    // f2.add(spotLight.target.position, 'x', -100, 100);
+    // f2.add(spotLight.target.position, 'y', -100, 1000);
+    // f2.add(spotLight.target.position, 'z', 0, 2000);
+    // gui.add(spotLight, 'exponent', 0, 1000);
+    // gui.add(spotLight, 'angle', 0, Math.PI/2);
+    // gui.add(spotLight, 'shadowCameraFar', 500, 2000);
 /*
     var f4 = f1.addFolder('EYE GEOMETRY');
     f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
@@ -322,11 +324,42 @@ function onKeyUp(evt)
 function onMouseDown(event)
 {
     event.preventDefault();
+
+    // check intersections with interactive objects
+    var vector = new THREE.Vector3(
+        ( event.clientX / window.innerWidth ) * 2 - 1,
+      - ( event.clientY / window.innerHeight ) * 2 + 1,
+        camera.near);
+    var projector = new THREE.Projector();
+    projector.unprojectVector( vector, camera );
+
+    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize(), 0, 2000);
+    var intersections = ray.intersectObject(remote, true);
+    if (intersections.length == 0) {
+        return;
+    }
+
+    var object = intersections[0].object;
+    if (object.handleMouseDown != null)
+    {
+        object.handleMouseDown();
+        pressedObjects.push(object);        
+    }
+
+    // console.log(result);
 }
 
 function onMouseUp(event)
 {
     event.preventDefault();
+
+    while (pressedObjects.length > 0)
+    {
+        var obj = pressedObjects.pop();
+        if (obj.handleMouseUp != null) {
+            obj.handleMouseUp();
+        }
+    }
 }
 
 function onMouseMove(event)
