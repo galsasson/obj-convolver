@@ -31,6 +31,12 @@ var screenLight;
 
 var pressedObjects = [];
 
+var camAngles = [{'x': 88.2, 'y':107.7, 'z':923.8, 'tx':45.5, 'ty':69.9, 'tz':483.5},
+                 {'x': 1119.8, 'y':387, 'z':1055.8, 'tx':106.7, 'ty':119.6, 'tz':263.1},
+                 {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500}
+                 ];
+var camPosTarget = null;
+var camTargetTarget = null;
 //***************************************************************************//
 // initialize the renderer, scene, camera, and lights                        //
 //***************************************************************************//
@@ -229,6 +235,20 @@ function run()
         // console.log("Target: " + controls.target.x + "x" + controls.target.y + "x" + controls.target.z);
     }
 
+    // change camera view angles
+    if (camPosTarget != null) {
+        camera.position.lerp(camPosTarget, 0.1);
+        if (camPosTarget.clone().sub(camera.position).length() < 0.1) {
+            camPosTarget = null;
+        }
+    }
+    if (camTargetTarget != null) {
+        controls.target.lerp(camTargetTarget, 0.1);
+        if (camTargetTarget.clone().sub(controls.target).length() < 0.1) {
+            camTargetTarget = null;
+        }
+    }
+
     // Ask for another frame
     requestAnimationFrame(run);
     controls.update();
@@ -268,13 +288,20 @@ function onKeyDown(evt)
         }
         animating = !animating;        
     }
+    else if (keyCode == 48) // 1
+    {
+        camPosTarget = new THREE.Vector3(camAngles[0].x, camAngles[0].y, camAngles[0].z);
+        camTargetTarget = new THREE.Vector3(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
+    }
     else if (keyCode == 49) // 1
     {
-        videoScreen.startLiveVideo();
+        camPosTarget = new THREE.Vector3(camAngles[1].x, camAngles[1].y, camAngles[1].z);
+        camTargetTarget = new THREE.Vector3(camAngles[1].tx, camAngles[1].ty, camAngles[1].tz);
     }
     else if (keyCode == 50) // 2
     {
-        videoScreen.playVideo("videos/bad_romance.mp4");
+        camPosTarget = new THREE.Vector3(camAngles[2].x, camAngles[2].y, camAngles[2].z);
+        camTargetTarget = new THREE.Vector3(camAngles[2].tx, camAngles[2].ty, camAngles[2].tz);
     }
     else if (keyCode == 51) // 3
     {
@@ -295,6 +322,11 @@ function onKeyDown(evt)
     else if (keyCode == 55) // 7
     {
         videoScreen.playVideo("videos/family.MOV");
+    }
+    else if (keyCode == 67) // 'c'
+    {
+        console.log(camera.position);
+        console.log(controls.target);
     }
     else if (keyCode == 69) // 'e'
     {

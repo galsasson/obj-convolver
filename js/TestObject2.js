@@ -116,20 +116,6 @@ TestObject2.prototype.extrudeFace = function(index, faces, vertices)
 	var index1=index*3;
 	var index2=index*3+1;
 	var index3=index*3+2;
-	// for (var i=0; i<this.shapeParticles.length; i++) {
-	// 	if (equals(basev1, this.shapeParticles[i].restPos)) {
-	// 		index1 = this.shapeParticles[i].index;
-	// 	}
-	// 	else if (equals(basev2, this.shapeParticles[i].restPos)) {
-	// 		index2 = this.shapeParticles[i].index;
-	// 	}
-	// 	else if (equals(basev3, this.shapeParticles[i].restPos)) {
-	// 		index3 = this.shapeParticles[i].index;
-	// 	}
-	// }
-	// this.shapeParticles.push(new ShapeParticle(basev1, basev1, basev1.clone().normalize(), index1));
-	// this.shapeParticles.push(new ShapeParticle(basev2, basev2, basev2.clone().normalize(), index2));
-	// this.shapeParticles.push(new ShapeParticle(basev3, basev3, basev3.clone().normalize(), index3));
 
 	var extrudedFace = {};
 	extrudedFace.v1 = basev1.clone();

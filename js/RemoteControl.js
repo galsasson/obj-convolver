@@ -41,41 +41,56 @@ RemoteControl.prototype.init = function()
 		this.position.y += 0.5;
 	}
 
+	// channels buttons
+	geo = new THREE.CubeGeometry(5, 4, 4, 1, 1, 1);
+	for (var i=0; i<9; i++)
+	{
+		var x = i%3;
+		var y = Math.floor(i/3);
+		var btn = new THREE.Mesh(geo, resMgr.materials.white.clone());
+		btn.position.set(-6 + x*6.2, 3.5, -15 + y*7);
+		btn.index = i;
+		btn.handleMouseDown = function()
+		{
+			remote.releaseAll();
+			this.material.emissive = new THREE.Color(0x444444);			
+			this.position.y -= 0.5;
+			videoScreen.setVideoSource(remote.channels[this.index]);
+		}
+		btn.handleMouseUp = function()
+		{
+			// this.material.emissive = new THREE.Color(0x0);			
+			this.position.y += 0.5;
+		}
+		this.buttons.push(btn);
+		this.add(btn);
+	}
+
+	// webcam button
 	this.webcam = new THREE.Mesh(geo, resMgr.materials.blue)
 	this.webcam.position.set(6.4, 3.5, -25);
-	this.add(this.webcam);
+	this.webcam.index = 9;
 	this.webcam.handleMouseDown = function()
 	{
+		remote.releaseAll();
 		this.material.emissive = new THREE.Color(0x222255);
 		this.position.y -= 0.5;
 		videoScreen.setVideoSource("webcam");
 	}
 	this.webcam.handleMouseUp = function()
 	{
-		this.material.emissive = new THREE.Color(0x0);
 		this.position.y += 0.5;
 	}
+	this.buttons.push(this.webcam);
+	this.add(this.webcam);
+}
 
-	geo = new THREE.CubeGeometry(5, 4, 4, 1, 1, 1);
-	for (var i=0; i<9; i++)
+RemoteControl.prototype.releaseAll = function()
+{
+	// unset all channels
+	for (var i=0; i<this.buttons.length; i++)
 	{
-		var x = i%3;
-		var y = Math.floor(i/3);
-		this.buttons[i] = new THREE.Mesh(geo, resMgr.materials.white.clone());
-		this.buttons[i].position.set(-6 + x*6.2, 3.5, -15 + y*7);
-		this.add(this.buttons[i]);
-		this.buttons[i].index = i;
-
-		this.buttons[i].handleMouseDown = function()
-		{
-			this.material.emissive = new THREE.Color(0x444444);			
-			this.position.y -= 0.5;
-			videoScreen.setVideoSource(remote.channels[this.index]);
-		}
-		this.buttons[i].handleMouseUp = function()
-		{
-			this.material.emissive = new THREE.Color(0x0);			
-			this.position.y += 0.5;
-		}
+		this.buttons[i].material.emissive = new THREE.Color(0x0);
 	}
+	this.webcam.material.emissive = new THREE.Color(0x0);
 }
