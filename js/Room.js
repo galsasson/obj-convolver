@@ -38,4 +38,43 @@ Room.prototype.init = function()
 	mesh.receiveShadow = true;
 	this.add(mesh);
 
+	// rc stand
+	geo = this.getRCStandGeo();
+	mesh = new THREE.Mesh(geo, resMgr.materials.rcstand);
+	mesh.position.set(120, -30, 560);
+	mesh.castShadow = true;
+	this.add(mesh);
+
+}
+
+Room.prototype.getRCStandGeo = function()
+{
+	var geo = new THREE.Geometry();
+	geo.vertices.push(new THREE.Vector3(-8, 0, -20));
+	geo.vertices.push(new THREE.Vector3(8, 0, -20));
+	geo.vertices.push(new THREE.Vector3(8, 0, 20));
+	geo.vertices.push(new THREE.Vector3(-8, 0, 20));
+
+	geo.vertices.push(new THREE.Vector3(-8, 65, -20));
+	geo.vertices.push(new THREE.Vector3(8, 65, -20));
+	geo.vertices.push(new THREE.Vector3(8, 50, 20));
+	geo.vertices.push(new THREE.Vector3(-8, 50, 20));
+
+	// geo.faces.push(new THREE.Face3( 0, 1, 2));
+	// geo.faces.push(new THREE.Face3( 0, 2, 3));
+	geo.faces.push(new THREE.Face3( 2, 7, 3));
+	geo.faces.push(new THREE.Face3( 7, 2, 6));
+	geo.faces.push(new THREE.Face3( 3, 4, 0));
+	geo.faces.push(new THREE.Face3( 3, 7, 4));
+	geo.faces.push(new THREE.Face3( 0, 5, 1));
+	geo.faces.push(new THREE.Face3( 4, 5, 0));
+	geo.faces.push(new THREE.Face3( 1, 6, 2));
+	geo.faces.push(new THREE.Face3( 5, 6, 1));
+	geo.faces.push(new THREE.Face3( 6, 4, 7));
+	geo.faces.push(new THREE.Face3( 6, 5, 4));
+
+	geo.computeFaceNormals();
+	geo.computeVertexNormals();
+
+	return geo;
 }

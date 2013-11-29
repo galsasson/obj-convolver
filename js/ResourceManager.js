@@ -22,6 +22,9 @@ ResourceManager.prototype.initMaterials = function()
 	this.materials.red = new THREE.MeshLambertMaterial( { color: 0xff0000, ambient: 0xff0000 } );
 	this.materials.led = new THREE.MeshLambertMaterial( { color: 0x990000, ambient: 0x990000 } );
 
+	this.materials.rcstand = new THREE.MeshPhongMaterial( {color: 0xffffff, ambient: 0xffffff, specular: 0xffffff} );
+	this.materials.rcstand.shading = THREE.FlatShading;
+
 
 //	this.materials.sofa = new THREE.MeshLambertMaterial( { color: 0x85724E, ambient: 0x85724E } );
 

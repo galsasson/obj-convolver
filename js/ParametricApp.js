@@ -151,7 +151,8 @@ function populateScene()
 
     remote = new RemoteControl();
     remote.init();
-    remote.position.set(88, 25, 435);
+    remote.rotation.x = 0.37;
+    remote.position.set(120, 31, 560);
     scene.add(remote);
 
 }
@@ -159,17 +160,11 @@ function populateScene()
 function addGui()
 {
     // var gui = new dat.GUI();
-    // var f = gui.addFolder('Screen light position');
-    // f.add(spotLight.position, 'x', -200, 200);
-    // f.add(spotLight.position, 'y', -100, 1000);
-    // f.add(spotLight.position, 'z', 0, 2000);
-    // var f2 = gui.addFolder('Screen light target');
-    // f2.add(spotLight.target.position, 'x', -100, 100);
-    // f2.add(spotLight.target.position, 'y', -100, 1000);
-    // f2.add(spotLight.target.position, 'z', 0, 2000);
-    // gui.add(spotLight, 'exponent', 0, 1000);
-    // gui.add(spotLight, 'angle', 0, Math.PI/2);
-    // gui.add(spotLight, 'shadowCameraFar', 500, 2000);
+    // var f = gui.addFolder('remote position');
+    // f.add(remote.position, 'x', 0, 200);
+    // f.add(remote.position, 'y', 0, 100);
+    // f.add(remote.position, 'z', 400, 700);
+    // gui.add(remote.rotation, 'x', 0, Math.PI/6);
 /*
     var f4 = f1.addFolder('EYE GEOMETRY');
     f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
