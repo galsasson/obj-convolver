@@ -28,7 +28,7 @@ function Particle(pos, restPos, dir, mappingIndex)
 		// {
 			// var vel = this.direction.clone().multiplyScalar(5);
 			// this.pos.add(this.direction.clone().multiplyScalar(force/50));
-			this.pos.addVectors(this.restPos.clone(), this.direction.clone().multiplyScalar(this.length));
+			this.pos.addVectors(this.restPos.clone(), this.direction.clone().multiplyScalar(staticExtrusion[this.index]+this.length));
 		// }
 
 	}	

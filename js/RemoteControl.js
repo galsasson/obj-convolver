@@ -5,7 +5,9 @@ RemoteControl = function()
 	THREE.Object3D.call(this);
 
 	this.onoff = null;
+	this.webcam = null;
 	this.buttons = [];
+	// TODO: add 9 channels
 	this.channels = ["videos/bad_romance.mp4",
 					 "videos/xbox_one.mp4",
 					 "videos/computer_graphics.mp4",
@@ -34,6 +36,21 @@ RemoteControl.prototype.init = function()
 		videoScreen.toggleOn();
 	}
 	this.onoff.handleMouseUp = function()
+	{
+		this.material.emissive = new THREE.Color(0x0);
+		this.position.y += 0.5;
+	}
+
+	this.webcam = new THREE.Mesh(geo, resMgr.materials.blue)
+	this.webcam.position.set(6.4, 3.5, -25);
+	this.add(this.webcam);
+	this.webcam.handleMouseDown = function()
+	{
+		this.material.emissive = new THREE.Color(0x222255);
+		this.position.y -= 0.5;
+		videoScreen.setVideoSource("webcam");
+	}
+	this.webcam.handleMouseUp = function()
 	{
 		this.material.emissive = new THREE.Color(0x0);
 		this.position.y += 0.5;

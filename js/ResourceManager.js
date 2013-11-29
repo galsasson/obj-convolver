@@ -18,8 +18,10 @@ ResourceManager.prototype.initMaterials = function()
 	// this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x030303, specular: 0xc0c0c0, shininess: 25 } );
 	this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x050505, specular: 0xc0c0c0, shininess: 50 } );
 	this.materials.object.shading = THREE.FlatShading;
+	// this.materials.object.metal = true;
 
 	this.materials.red = new THREE.MeshLambertMaterial( { color: 0xff0000, ambient: 0xff0000 } );
+	this.materials.blue = new THREE.MeshLambertMaterial( { color: 0x0000ff, ambient: 0x0000ff } );
 	this.materials.led = new THREE.MeshLambertMaterial( { color: 0x990000, ambient: 0x990000 } );
 
 	this.materials.rcstand = new THREE.MeshPhongMaterial( {color: 0xffffff, ambient: 0xffffff, specular: 0xffffff} );

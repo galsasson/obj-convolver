@@ -216,6 +216,7 @@ VideoScreen.prototype.processVideo = function()
 	      	var diffSum = diffR + diffG + diffB;
 
 			mappingData[i] = diffSum/765;
+			staticExtrusion[i] += mappingData[i]/20;
 		}
 		else {
 			// first frame
@@ -248,7 +249,7 @@ VideoScreen.prototype.processVideo = function()
 
 	      	var diffSum = diffR + diffG + diffB;
 
-			shapeMappingData[i] = diffSum/765;
+			shapeMappingData[i] = Math.pow(diffSum/765, 2);
 			overallDiff += shapeMappingData[i];
 		}
 		else {

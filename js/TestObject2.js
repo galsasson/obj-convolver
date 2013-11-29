@@ -10,7 +10,9 @@ TestObject2.prototype = Object.create(THREE.Object3D.prototype);
 
 TestObject2.prototype.init = function()
 {
-	this.geo = new THREE.SphereGeometry(20, 15, 15);
+	this.geo = new THREE.OctahedronGeometry( 20, 2 );
+	// this.geo = new THREE.TetrahedronGeometry( 20, 3 );
+	// this.geo = new THREE.SphereGeometry(20, 12, 12);
 	// this.geo = new THREE.CylinderGeometry( 20, 20, 50, 18, 18, false);
 	// this.geo = new THREE.CubeGeometry( 20, 20, 20, 12, 12, 12);
 	// this.geo = new THREE.PlaneGeometry( 40, 40, 12, 12 );
@@ -94,6 +96,7 @@ TestObject2.prototype.extrudeTriangles = function(geo)
 	for (var i=0; i<this.extrusionFaces.length*3; i++)
 	{
 		mappingData[i] = 0;
+		staticExtrusion[i] = 2;
 	}
 
 }
