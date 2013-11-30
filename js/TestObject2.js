@@ -154,6 +154,11 @@ TestObject2.prototype.extrudeFace = function(index, faces, vertices)
 	return geo;
 }
 
+TestObject2.prototype.makeIntoNeckless = function()
+{
+	var torusGeo = new THREE.TorusGeometry( radius, tube, segmentsR, segmentsT, arc );
+}
+
 function equals(v1, v2)
 {
 	if (Math.abs(v1.x - v2.x) < 0.001 &&
@@ -165,4 +170,6 @@ function equals(v1, v2)
 		return false;
 	}
 }
+
+
 

@@ -9,19 +9,21 @@ ResourceManager.prototype.constructor = ResourceManager;
 ResourceManager.prototype.initMaterials = function()
 {
 	this.materials.white = new THREE.MeshLambertMaterial( { color: 0xffffff, ambient: 0xffffff } );
-	this.materials.lightGray = new THREE.MeshLambertMaterial( { color: 0x888888, ambient: 0x444444 } );
+	this.materials.lightGray = new THREE.MeshLambertMaterial( { color: 0xdddddd, ambient: 0xaaaaaa } );
 	this.materials.gray = new THREE.MeshLambertMaterial( { color: 0x444444, ambient: 0x222222 } );
 	this.materials.black = new THREE.MeshLambertMaterial( { color: 0x0, ambient: 0x0 } );
 	this.materials.screenBack = new THREE.MeshLambertMaterial( { color: 0x222222, ambient: 0x111111 } );
 
-	this.materials.walls = new THREE.MeshLambertMaterial( { color: 0x96A9B5, ambient: 0x8598A4 } );
+	// this.materials.floor = new THREE.MeshLambertMaterial( { color: 0xC49756, ambient: 0xC49756 } );
+	this.materials.floor = new THREE.MeshLambertMaterial( { color: 0xC6B263, ambient: 0xC6B263 } );
+	this.materials.walls = new THREE.MeshLambertMaterial( { color: 0xE6D283, ambient: 0xE6D283 } );
+
 	// this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x030303, specular: 0xc0c0c0, shininess: 25 } );
 	this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x050505, specular: 0xc0c0c0, shininess: 50 } );
 	this.materials.object.shading = THREE.FlatShading;
-	// this.materials.object.metal = true;
 
-	this.materials.red = new THREE.MeshLambertMaterial( { color: 0xff0000, ambient: 0xff0000 } );
-	this.materials.blue = new THREE.MeshLambertMaterial( { color: 0x0000ff, ambient: 0x0000ff } );
+	this.materials.red = new THREE.MeshLambertMaterial( { color: 0xaa0000, ambient: 0xaa0000 } );
+	this.materials.green = new THREE.MeshLambertMaterial( { color: 0x00aa00, ambient: 0x00aa00 } );
 	this.materials.led = new THREE.MeshLambertMaterial( { color: 0x990000, ambient: 0x990000 } );
 
 	this.materials.rcstand = new THREE.MeshPhongMaterial( {color: 0xffffff, ambient: 0xffffff, specular: 0xffffff} );

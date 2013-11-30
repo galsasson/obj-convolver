@@ -85,6 +85,7 @@ VideoScreen.prototype.turnOn = function()
 VideoScreen.prototype.turnOff = function()
 {
 	this.led.material.emissive = new THREE.Color(0x0);
+	screenLight.color = new THREE.Color(0x0);
 	this.video.pause();
 	// remove video panel
 	if (this.screenMesh) {
@@ -216,7 +217,7 @@ VideoScreen.prototype.processVideo = function()
 	      	var diffSum = diffR + diffG + diffB;
 
 			mappingData[i] = diffSum/765;
-			staticExtrusion[i] += mappingData[i]/20;
+			staticExtrusion[i] += mappingData[i]/10;
 		}
 		else {
 			// first frame

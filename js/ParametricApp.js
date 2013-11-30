@@ -32,8 +32,9 @@ var screenLight;
 var pressedObjects = [];
 
 var camAngles = [{'x': 88.2, 'y':107.7, 'z':923.8, 'tx':45.5, 'ty':69.9, 'tz':483.5},
-                 {'x': 1119.8, 'y':387, 'z':1055.8, 'tx':106.7, 'ty':119.6, 'tz':263.1},
-                 {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500}
+                 {'x': 1294.9, 'y':191.9, 'z':1061.4, 'tx':107.2, 'ty':109.7, 'tz':223.7},
+                 {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500},
+                 {'x': -871.9, 'y':576.4, 'z':1625.6, 'tx':55.8, 'ty':104, 'tz':172.9}
                  ];
 var camPosTarget = null;
 var camTargetTarget = null;
@@ -46,10 +47,11 @@ function onLoad()
     var container = document.getElementById("container");
 
     // Create the Three.js renderer, add it to our div
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer = new THREE.WebGLRenderer( { antialias: true } );    
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0);
     renderer.shadowMapEnabled = true;
+    renderer.shadowMapSoft = true;
     container.appendChild( renderer.domElement );
 
     // Create a new Three.js scene
@@ -104,7 +106,7 @@ function initSceneLights()
 {
     // Create an ambient and a directional light to show off the object
     // var dirLight = [];
-    var ambLight = new THREE.AmbientLight( 0x222222 ); // soft white light
+    var ambLight = new THREE.AmbientLight( 0x333333 ); // soft white light
     scene.add( ambLight );
 
     // object spotlight
@@ -119,9 +121,9 @@ function initSceneLights()
     scene.add(spotLight);
 
     // screen spotlight
-    screenLight = new THREE.SpotLight(0x000000, 1);
-    screenLight.angle = 0.12;
-    screenLight.exponent = 206;
+    screenLight = new THREE.SpotLight(0x000000, 3.5);
+    screenLight.angle = 0.27;
+    screenLight.exponent = 103;
     screenLight.position.set(0, 361, -1691);
     screenLight.target.position.set(0, -100, 800);
     scene.add(screenLight);
@@ -153,13 +155,13 @@ function populateScene()
 
     videoScreen = new VideoScreen();
     videoScreen.init();
-    videoScreen.position.set(0, 100, -220);
+    videoScreen.position.set(0, 120, -280);
     scene.add(videoScreen);
 
     remote = new RemoteControl();
     remote.init();
     remote.rotation.x = 0.37;
-    remote.position.set(120, 31, 560);
+    remote.position.set(120, 29, 560);
     scene.add(remote);
 
 }
@@ -167,9 +169,9 @@ function populateScene()
 function addGui()
 {
     // var gui = new dat.GUI();
-    // var f = gui.addFolder('remote position');
-    // f.add(remote.position, 'x', 0, 200);
-    // f.add(remote.position, 'y', 0, 100);
+    // gui.add(screenLight, 'angle', 0, 3.14);
+    // gui.add(screenLight, 'exponent', 0, 500);
+    // gui.add(screenLight, 'intensity', 0, 4);
     // f.add(remote.position, 'z', 400, 700);
     // gui.add(remote.rotation, 'x', 0, Math.PI/6);
 /*
@@ -231,8 +233,6 @@ function run()
         if (testObject) {
             testObject.update();
         }
-        // console.log("Position: " + camera.position.x + "x" + camera.position.y + "x" + camera.position.z);
-        // console.log("Target: " + controls.target.x + "x" + controls.target.y + "x" + controls.target.z);
     }
 
     // change camera view angles
@@ -288,24 +288,11 @@ function onKeyDown(evt)
         }
         animating = !animating;        
     }
-    else if (keyCode == 48) // 1
-    {
-        camPosTarget = new THREE.Vector3(camAngles[0].x, camAngles[0].y, camAngles[0].z);
-        camTargetTarget = new THREE.Vector3(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
-    }
-    else if (keyCode == 49) // 1
-    {
-        camPosTarget = new THREE.Vector3(camAngles[1].x, camAngles[1].y, camAngles[1].z);
-        camTargetTarget = new THREE.Vector3(camAngles[1].tx, camAngles[1].ty, camAngles[1].tz);
-    }
-    else if (keyCode == 50) // 2
-    {
-        camPosTarget = new THREE.Vector3(camAngles[2].x, camAngles[2].y, camAngles[2].z);
-        camTargetTarget = new THREE.Vector3(camAngles[2].tx, camAngles[2].ty, camAngles[2].tz);
-    }
-    else if (keyCode == 51) // 3
-    {
-        videoScreen.playVideo("videos/xbox_one.mp4");
+    else if (keyCode >= 48 &&
+             keyCode < 48+camAngles.length) {
+        var angle = keyCode-48;
+        camPosTarget = new THREE.Vector3(camAngles[angle].x, camAngles[angle].y, camAngles[angle].z);
+        camTargetTarget = new THREE.Vector3(camAngles[angle].tx, camAngles[angle].ty, camAngles[angle].tz);        
     }
     else if (keyCode == 52) // 4
     {
@@ -352,6 +339,10 @@ function onKeyUp(evt)
 function onMouseDown(event)
 {
     event.preventDefault();
+
+    // stop flying
+    camPosTarget = null;
+    camTargetTarget = null;
 
     // check intersections with interactive objects
     var vector = new THREE.Vector3(
