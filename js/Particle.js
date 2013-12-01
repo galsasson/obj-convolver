@@ -5,6 +5,7 @@ function Particle(pos, restPos, dir, mappingIndex)
 	this.direction = dir.clone();
 	this.index = mappingIndex;
 
+	this.staticLength = 0;
 	this.length = 0;
 	this.acc = 0;
 	this.vel = 0;
@@ -18,6 +19,7 @@ function Particle(pos, restPos, dir, mappingIndex)
 		var force = mappingData[this.index]*10;
 		this.vel = force;
 		this.length += this.vel;
+		this.staticLength += mappingData[this.index]/20;
 
 		// friction
 		this.length *= 0.8;
@@ -28,7 +30,7 @@ function Particle(pos, restPos, dir, mappingIndex)
 		// {
 			// var vel = this.direction.clone().multiplyScalar(5);
 			// this.pos.add(this.direction.clone().multiplyScalar(force/50));
-			this.pos.addVectors(this.restPos.clone(), this.direction.clone().multiplyScalar(staticExtrusion[this.index]+this.length));
+			this.pos.addVectors(this.restPos.clone(), this.direction.clone().multiplyScalar(this.staticLength+this.length));
 		// }
 
 	}	

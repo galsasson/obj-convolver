@@ -4,6 +4,7 @@ VideoScreen = function()
 {
 	THREE.Object3D.call(this);
 
+	this.stream = null;
 	this.prevFrame = null;
 	this.led = null;
 	this.on = false;
@@ -86,6 +87,10 @@ VideoScreen.prototype.turnOff = function()
 {
 	this.led.material.emissive = new THREE.Color(0x0);
 	screenLight.color = new THREE.Color(0x0);
+	if (this.stream != null) {
+		this.stream.stop();
+		this.stream = null;
+	}
 	this.video.pause();
 	// remove video panel
 	if (this.screenMesh) {
@@ -95,6 +100,13 @@ VideoScreen.prototype.turnOff = function()
 
 VideoScreen.prototype.setVideoSource = function(source)
 {
+	// if we currently showing live webcam, stop the stream
+	if (this.stream != null)
+	{
+		this.stream.stop();
+		this.stream = null;
+	}
+
 	this.source = source;
 	if (this.on) {
 		if (source == "webcam")
@@ -185,7 +197,7 @@ VideoScreen.prototype.processVideo = function()
 
 	// direct mapping between video and force
 	var nPixels = frame.width*frame.height;
-	var parToPix = Math.floor(nPixels / nParticles);
+	var pixToPar = Math.floor(nPixels / nParticles);
 	var screenRed = 0;
 	var screenGreen = 0;
 	var screenBlue = 0;
@@ -193,7 +205,7 @@ VideoScreen.prototype.processVideo = function()
 	// go through the face particles
 	for (var i=0; i<nParticles; i++)
 	{
-		var pixel = i*parToPix*4;
+		var pixel = i*pixToPar*4;
 
 		var r = frame.data[pixel];
 		var g = frame.data[pixel+1];
@@ -216,8 +228,10 @@ VideoScreen.prototype.processVideo = function()
 
 	      	var diffSum = diffR + diffG + diffB;
 
+	      	// mappingData[i] = 0;
+	      	// staticExtrusion[i] = 0;
 			mappingData[i] = diffSum/765;
-			staticExtrusion[i] += mappingData[i]/10;
+			// staticExtrusion[i] += mappingData[i]/15;
 		}
 		else {
 			// first frame
@@ -228,29 +242,16 @@ VideoScreen.prototype.processVideo = function()
 	// now go through all of the shape particles
 	var overallDiff = 0;
 	var numShapePar = testObject.shapeParticles.length;
-	parToPix = Math.floor(nPixels / numShapePar);
+	pixToPar = Math.floor(nPixels / numShapePar);
 	for (var i=0; i<numShapePar; i++)
 	{
-		var pixel = i*parToPix*4;
-
-		var r = frame.data[pixel];
-		var g = frame.data[pixel+1];
-		var b = frame.data[pixel+2];
-
 		if (this.prevFrame) 
 		{
-			var pr = this.prevFrame.data[pixel];
-			var pg = this.prevFrame.data[pixel+1];
-			var pb = this.prevFrame.data[pixel+2];
+			var pixel = i*pixToPar*4;
 
-			// Compute the difference of the red, green, and blue values
-			var diffR = Math.abs(r - pr);
-			var diffG = Math.abs(g - pg);
-			var diffB = Math.abs(b - pb);
+			var diff = this.getNormalizedDiff(frame.data, pixel, pixToPar);
 
-	      	var diffSum = diffR + diffG + diffB;
-
-			shapeMappingData[i] = Math.pow(diffSum/765, 2);
+			shapeMappingData[i] = diff/800000;
 			overallDiff += shapeMappingData[i];
 		}
 		else {
@@ -260,7 +261,7 @@ VideoScreen.prototype.processVideo = function()
 	}
 
 	// dont change the shape on cuts
-	if (overallDiff > 500) {
+	if (overallDiff > 200) {
 		console.log("cut");
 		// this might be a cut, don't treat it as movement
 		for (var i=0; i<numShapePar; i++)
@@ -277,4 +278,30 @@ VideoScreen.prototype.processVideo = function()
 	screenLight.color = new THREE.Color(screenRed<<16 | screenGreen<<8 | screenBlue);
 
 	this.prevFrame = frame;
+}
+
+VideoScreen.prototype.getNormalizedDiff = function(data, index, count)
+{
+	var overallDiff = 0;
+	var end = index+(count*4);
+	for (var i=index; i<end; i+=4)
+	{
+		var r = data[i];
+		var g = data[i+1];
+		var b = data[i+2];
+
+		var pr = this.prevFrame.data[i];
+		var pg = this.prevFrame.data[i+1];
+		var pb = this.prevFrame.data[i+2];
+
+		// Compute the difference of the red, green, and blue values
+		var diffR = Math.abs(r - pr);
+		var diffG = Math.abs(g - pg);
+		var diffB = Math.abs(b - pb);
+
+      	overallDiff += diffR + diffG + diffB;		
+	}
+	// console.log(overallDiff);
+	// overallDiff /= count*10;
+	return overallDiff;
 }

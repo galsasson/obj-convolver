@@ -22,7 +22,6 @@ var remote = null;
 // mapping between video and forcePerParticle
 var nParticles = 0;
 var mappingData = [];
-var staticExtrusion = [];
 var shapeMappingData = [];
 
 var spotLight;

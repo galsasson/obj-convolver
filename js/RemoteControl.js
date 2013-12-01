@@ -9,10 +9,10 @@ RemoteControl = function()
 	this.buttons = [];
 	// TODO: add 9 channels
 	this.channels = ["videos/bad_romance.mp4",
-					 "videos/xbox_one.mp4",
+					 "videos/different_pulses.mp4",
 					 "videos/computer_graphics.mp4",
-					 "videos/macdonalds.mp4",
-					 "videos/kanye_west.mp4",
+					 "videos/protection.mp4",
+					 "videos/crazy.mp4",
 					 "videos/family.MOV"];
 }
 RemoteControl.prototype = Object.create(THREE.Object3D.prototype);

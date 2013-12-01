@@ -96,7 +96,6 @@ TestObject2.prototype.extrudeTriangles = function(geo)
 	for (var i=0; i<this.extrusionFaces.length*3; i++)
 	{
 		mappingData[i] = 0;
-		staticExtrusion[i] = 2;
 	}
 
 }
