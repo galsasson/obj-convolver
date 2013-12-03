@@ -251,7 +251,8 @@ VideoScreen.prototype.processVideo = function()
 
 			var diff = this.getNormalizedDiff(frame.data, pixel, pixToPar);
 
-			shapeMappingData[i] = diff/800000;
+			// shapeMappingData[i] = diff/800000;
+			shapeMappingData[i] = diff;
 			overallDiff += shapeMappingData[i];
 		}
 		else {
@@ -261,14 +262,14 @@ VideoScreen.prototype.processVideo = function()
 	}
 
 	// dont change the shape on cuts
-	if (overallDiff > 200) {
-		console.log("cut");
-		// this might be a cut, don't treat it as movement
-		for (var i=0; i<numShapePar; i++)
-		{
-			shapeMappingData[i] = 0;
-		}
-	}
+	// if (overallDiff > 200) {
+	// 	console.log("cut");
+	// 	// this might be a cut, don't treat it as movement
+	// 	for (var i=0; i<numShapePar; i++)
+	// 	{
+	// 		shapeMappingData[i] = 0;
+	// 	}
+	// }
 
 
 	// set screen light color
@@ -303,5 +304,5 @@ VideoScreen.prototype.getNormalizedDiff = function(data, index, count)
 	}
 	// console.log(overallDiff);
 	// overallDiff /= count*10;
-	return overallDiff;
+	return overallDiff/(count*765);
 }

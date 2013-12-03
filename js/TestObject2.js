@@ -2,6 +2,9 @@ TestObject2 = function()
 {
 	THREE.Object3D.call(this);
 
+	this.size = 40;
+	this.showFaces = true;
+
 	this.extrusionFaces = [];
 	this.particles = [];
 	this.shapeParticles = [];
@@ -10,7 +13,12 @@ TestObject2.prototype = Object.create(THREE.Object3D.prototype);
 
 TestObject2.prototype.init = function()
 {
-	this.geo = new THREE.OctahedronGeometry( 20, 2 );
+	var detail = 2;
+	if (highRes) {
+		detail = 3;
+	}
+
+	this.geo = new THREE.OctahedronGeometry( this.size, detail );
 	// this.geo = new THREE.TetrahedronGeometry( 20, 3 );
 	// this.geo = new THREE.SphereGeometry(20, 12, 12);
 	// this.geo = new THREE.CylinderGeometry( 20, 20, 50, 18, 18, false);
@@ -30,11 +38,13 @@ TestObject2.prototype.init = function()
 
 TestObject2.prototype.update = function()
 {
+	// update shape
 	for (var i=0; i<this.shapeParticles.length; i++)
 	{
 		this.shapeParticles[i].update();		
 	}
 
+	// update extruded triangles
 	for (var i=0; i<this.particles.length; i++)
 	{
 		this.particles[i].update();
@@ -55,6 +65,14 @@ TestObject2.prototype.update = function()
 		face.geo.verticesNeedUpdate = true;
 		face.geo.normalsNeedUpdate = true;
 	}
+
+	// scale object to a fixed size
+	var max = this.getMax();
+	var scale = this.size/max;
+	this.scale.set(scale, scale, scale);
+	reversedScale = max/this.size;
+
+	// console.log(max);
 }
 
 
@@ -156,6 +174,44 @@ TestObject2.prototype.extrudeFace = function(index, faces, vertices)
 TestObject2.prototype.makeIntoNeckless = function()
 {
 	var torusGeo = new THREE.TorusGeometry( radius, tube, segmentsR, segmentsT, arc );
+}
+
+TestObject2.prototype.getMax = function()
+{
+	//var max = new THREE.Vector3(0, 0, 0);
+	var max = 0;
+
+	for (var c=0; c<this.children.length; c++)
+	{
+		var child = this.children[c];
+		var verts = child.geometry.vertices;
+		for (var i=0; i<verts.length; i++)
+		{
+			if (Math.abs(verts[i].x) > max) {
+				max = Math.abs(verts[i].x);
+			}
+			if (Math.abs(verts[i].y) > max) {
+				max = Math.abs(verts[i].y);
+			}
+			if (Math.abs(verts[i].z) > max) {
+				max = Math.abs(verts[i].z);
+			}
+		}
+		
+		// console.log(maxX);
+
+		// return Math.max(max.x, max.y, max.z);
+		return max;
+	}
+}
+
+TestObject2.prototype.toggleFaces = function()
+{
+	this.showFaces = !this.showFaces;
+	for (var i=1; i<this.children.length; i++)
+	{
+		this.children[i].visible = this.showFaces;
+	}
 }
 
 function equals(v1, v2)

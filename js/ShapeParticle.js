@@ -11,8 +11,8 @@ function ShapeParticle(restPos, dir, mappingIndex)
 	{
 		var force = shapeMappingData[this.index];
 
-		this.displace += force*1;
-		// this.displace += force*1;
+		this.displace += Math.pow(force*10, 2);
+
 		for (var i=0; i<this.vertices.length; i++)
 		{
 			this.vertices[i].addVectors(this.restPos, this.direction.clone().multiplyScalar(this.displace));

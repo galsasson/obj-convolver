@@ -30,6 +30,10 @@ var screenLight;
 
 var pressedObjects = [];
 
+var reversedScale = 1;
+
+var highRes = true;
+
 var camAngles = [{'x': 88.2, 'y':107.7, 'z':923.8, 'tx':45.5, 'ty':69.9, 'tz':483.5},
                  {'x': 1294.9, 'y':191.9, 'z':1061.4, 'tx':107.2, 'ty':109.7, 'tz':223.7},
                  {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500},
@@ -149,6 +153,7 @@ function populateScene()
 
     testObject = new TestObject2();
     testObject.init();
+    testObject.rotation.x = Math.PI/2;
     testObject.position.set(0, 80, 500);
     scene.add(testObject);
 
@@ -293,22 +298,6 @@ function onKeyDown(evt)
         camPosTarget = new THREE.Vector3(camAngles[angle].x, camAngles[angle].y, camAngles[angle].z);
         camTargetTarget = new THREE.Vector3(camAngles[angle].tx, camAngles[angle].ty, camAngles[angle].tz);        
     }
-    else if (keyCode == 52) // 4
-    {
-        videoScreen.playVideo("videos/computer_graphics.mp4");
-    }
-    else if (keyCode == 53) // 5
-    {
-        videoScreen.playVideo("videos/macdonalds.mp4");
-    }
-    else if (keyCode == 54) // 6
-    {
-        videoScreen.playVideo("videos/kanye_west.mp4");
-    }
-    else if (keyCode == 55) // 7
-    {
-        videoScreen.playVideo("videos/family.MOV");
-    }
     else if (keyCode == 67) // 'c'
     {
         console.log(camera.position);
@@ -325,6 +314,9 @@ function onKeyDown(evt)
             exporter.exportScene(testObject);
             exporter.sendToServer();
         // }
+    }
+    else if (keyCode == 70) {
+        testObject.toggleFaces();
     }
 }
 
