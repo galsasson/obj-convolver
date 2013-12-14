@@ -8,13 +8,14 @@ RemoteControl = function()
 	this.webcam = null;
 	this.buttons = [];
 	// TODO: add 9 channels
-	this.channels = ["videos/bad_romance.mp4",
+	this.channels = ["videos/money_for_nothing.mp4",
 					 "videos/different_pulses.mp4",
 					 "videos/computer_graphics.mp4",
 					 "videos/protection.mp4",
 					 "videos/crazy.mp4",
 					 "videos/xx.mp4",
-					 "videos/stuck_in_the_middle.mp4",
+					 "videos/goodbye_blue_sky.mp4",
+					 // "videos/stuck_in_the_middle.mp4",
 					 "videos/itzhak_perlman_winter.mp4"];
 }
 RemoteControl.prototype = Object.create(THREE.Object3D.prototype);

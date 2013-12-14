@@ -315,8 +315,11 @@ function onKeyDown(evt)
             exporter.sendToServer();
         // }
     }
-    else if (keyCode == 70) {
+    else if (keyCode == 70) {   // 'f'
         testObject.toggleFaces();
+    }
+    else if (keyCode == 77) {   // 'm'
+        testObject.toggleFaceMovement();
     }
 }
 

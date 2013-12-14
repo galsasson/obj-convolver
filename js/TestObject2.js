@@ -2,8 +2,9 @@ TestObject2 = function()
 {
 	THREE.Object3D.call(this);
 
-	this.size = 40;
+	this.size = 30;
 	this.showFaces = true;
+	this.showFaceMovement = true;
 
 	this.extrusionFaces = [];
 	this.particles = [];
@@ -212,6 +213,11 @@ TestObject2.prototype.toggleFaces = function()
 	{
 		this.children[i].visible = this.showFaces;
 	}
+}
+
+TestObject2.prototype.toggleFaceMovement = function()
+{
+	this.showFaceMovement = !this.showFaceMovement;
 }
 
 function equals(v1, v2)

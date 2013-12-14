@@ -17,14 +17,16 @@ function Particle(pos, restPos, dir, mappingIndex)
 	{
 
 		var force = mappingData[this.index]*10;
-		this.vel = force;
-		this.length += this.vel * reversedScale;
-		if (!highRes) {
-			this.staticLength += mappingData[this.index]/15 * reversedScale;
+		
+		if (testObject.showFaceMovement) {
+			this.vel = force;
 		}
 		else {
-			this.staticLength += mappingData[this.index]/15 * reversedScale;
+			this.vel = 0;
 		}
+
+		this.length += this.vel * reversedScale;
+		this.staticLength += mappingData[this.index]/15 * reversedScale;
 
 		// friction
 		this.length *= 0.8;

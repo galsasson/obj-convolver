@@ -123,7 +123,73 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 865,
+				"buffer_size": 1161,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/RemoteControl.js",
+			"settings":
+			{
+				"buffer_size": 2716,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/TestObject2.js",
+			"settings":
+			{
+				"buffer_size": 5810,
+				"line_ending": "Unix",
+				"name": "TestObject2 = function()"
+			}
+		},
+		{
+			"file": "/Users/gal/itp/galsasson.github.io/parametric/js/TestObject.js",
+			"settings":
+			{
+				"buffer_size": 3318,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/Particle.js",
+			"settings":
+			{
+				"buffer_size": 1018,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/ShapeParticle.js",
+			"settings":
+			{
+				"buffer_size": 656,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/VideoScreen.js",
+			"settings":
+			{
+				"buffer_size": 7273,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/Room.js",
+			"settings":
+			{
+				"buffer_size": 2753,
+				"line_ending": "Unix",
+				"name": "Room = function()"
+			}
+		},
+		{
+			"file": "js/ResourceManager.js",
+			"settings":
+			{
+				"buffer_size": 7009,
 				"line_ending": "Unix"
 			}
 		}
@@ -171,7 +237,13 @@
 	},
 	"file_history":
 	[
+		"/Users/gal/itp/projects/obj-convolver/js/ParametricApp.js",
+		"/Users/gal/itp/projects/obj-convolver/js/libs/GeodesicSphere.js",
+		"/Users/gal/itp/projects/obj-convolver/js/libs/threex.domevent.object3d.js",
+		"/Users/gal/itp/projects/obj-convolver/js/libs/threex.domevent.js",
+		"/Users/gal/itp/projects/obj-convolver/php/save.php",
 		"/Users/gal/itp/projects/obj-convolver/js/TestObject.js",
+		"/Users/gal/itp/projects/obj-convolver/js/Video.js",
 		"/Users/gal/itp/projects/microsoft/Roommate/src/dummyfeed/feedata.sh",
 		"/Users/gal/itp/projects/microsoft/Roommate/src/dummyfeed/addSession.sh",
 		"/Users/gal/itp/galsasson.github.io/parametric/js/TestObject.js",
@@ -235,6 +307,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"extrusionFaces",
+			"onMouseDown",
+			"subSelf",
+			"_projector",
+			"unprojectVector",
+			"projectionMatrixInverse",
+			"projectionMatricInverse",
+			"Object3D",
+			"extrude1",
 			"stopTheirStream",
 			"width",
 			"tracker",
@@ -295,15 +376,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 865,
+						"buffer_size": 1161,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								445,
+								445
 							]
 						],
 						"settings":
@@ -314,6 +395,228 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "js/RemoteControl.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2716,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								189,
+								189
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 118.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "js/TestObject2.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5810,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								71,
+								71
+							]
+						],
+						"settings":
+						{
+							"auto_name": "TestObject2 = function()",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Users/gal/itp/galsasson.github.io/parametric/js/TestObject.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3318,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								230,
+								230
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "js/Particle.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1018,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								620,
+								620
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "js/ShapeParticle.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 656,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								333,
+								333
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "js/VideoScreen.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7273,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6075,
+								6075
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3640.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "js/Room.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2753,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1233,
+								1233
+							]
+						],
+						"settings":
+						{
+							"auto_name": "Room = function()",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 39.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "js/ResourceManager.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7009,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1419,
+								1419
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 93.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
