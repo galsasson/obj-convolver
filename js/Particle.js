@@ -42,7 +42,7 @@ function Particle(pos, restPos, dir, mappingIndex)
 
 	}
 
-	this.goback = function()
+	this.reset = function()
 	{
 		this.staticLength = 0.2;
 	}

@@ -8,16 +8,18 @@ RemoteControl = function()
 	this.webcam = null;
 	this.buttons = [];
 	// TODO: add 9 channels
-	this.channels = ["videos/money_for_nothing.mp4",
-					 "videos/different_pulses.mp4",
-					 "videos/computer_graphics.mp4",
-					 "videos/protection.mp4",
-					 "videos/crazy.mp4",
-					 "videos/xx.mp4",
-					 "videos/goodbye_blue_sky.mp4",
-					 "videos/stuck_in_the_middle.mp4",
-					 //"videos/itzhak_perlman_winter.mp4"
+	this.channels = [{vid:"videos/money_for_nothing.mp4",length:243000},
+					 {vid:"videos/different_pulses.mp4",length:270000},
+					 {vid:"videos/computer_graphics.mp4", length:60000},
+					 {vid:"videos/protection.mp4", length:393000},
+					 {vid:"videos/crazy.mp4",length:183000},
+					 {vid:"videos/xx.mp4",length:217000},
+					 {vid:"videos/goodbye_blue_sky.mp4",length:126000},
+					 {vid:"videos/stuck_in_the_middle.mp4",length:207000},
 					 ];
+
+	this.videoLength = [
+						, ]
 }
 RemoteControl.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -65,7 +67,7 @@ RemoteControl.prototype.init = function()
 			remote.releaseAll();
 			this.material.emissive = new THREE.Color(0x444444);			
 			this.position.y -= 0.1;
-			videoScreen.setVideoSource(remote.channels[this.index]);
+			videoScreen.setVideoSource(remote.channels[this.index].vid);
 		}
 		btn.handleMouseUp = function()
 		{

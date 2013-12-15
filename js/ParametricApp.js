@@ -35,7 +35,7 @@ var reversedScale = 1;
 var highRes = true;
 
 var camAngles = [{'x': 88.2, 'y':107.7, 'z':923.8, 'tx':45.5, 'ty':69.9, 'tz':483.5},
-                 {'x': 1294.9, 'y':191.9, 'z':1061.4, 'tx':107.2, 'ty':109.7, 'tz':223.7},
+                 {'x': 1173.9, 'y':236.6, 'z':1538.5, 'tx':107.2, 'ty':109.7, 'tz':223.7},
                  {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500},
                  {'x': -871.9, 'y':576.4, 'z':1625.6, 'tx':55.8, 'ty':104, 'tz':172.9}
                  ];
@@ -241,13 +241,13 @@ function run()
 
     // change camera view angles
     if (camPosTarget != null) {
-        camera.position.lerp(camPosTarget, 0.1);
+        camera.position.lerp(camPosTarget, 0.01);
         if (camPosTarget.clone().sub(camera.position).length() < 0.1) {
             camPosTarget = null;
         }
     }
     if (camTargetTarget != null) {
-        controls.target.lerp(camTargetTarget, 0.1);
+        controls.target.lerp(camTargetTarget, 0.01);
         if (camTargetTarget.clone().sub(controls.target).length() < 0.1) {
             camTargetTarget = null;
         }
@@ -295,8 +295,7 @@ function onKeyDown(evt)
     else if (keyCode >= 48 &&
              keyCode < 48+camAngles.length) {
         var angle = keyCode-48;
-        camPosTarget = new THREE.Vector3(camAngles[angle].x, camAngles[angle].y, camAngles[angle].z);
-        camTargetTarget = new THREE.Vector3(camAngles[angle].tx, camAngles[angle].ty, camAngles[angle].tz);        
+        setCameraAngle(angle);
     }
     else if (keyCode == 67) // 'c'
     {
@@ -322,22 +321,65 @@ function onKeyDown(evt)
         testObject.toggleFaceMovement();
     }
     else if (keyCode == 82) {   // 'r'
-        testObject.reset();
+        resetObject();
+    }
+    else if (keyCode == 65) {   // 'a'
         nextClip();
+        nextViewAngle();
     }
 }
 
 var currentClip = 0;
+var currentViewAngle = 0;
 
 function nextClip()
 {
     currentClip++;
+    if (currentClip >= 8) {
+        currentClip = 0;
+    }
 
-    // videoScreen.turnOff();
+    if (videoScreen.on) {
+        setTimeout(screenToggle, 0);
+    }
+    setTimeout(resetObject, 200);
+    setTimeout(selectChannel, 400);
+    setTimeout(screenToggle, 600);
+    setTimeout(nextClip, remote.channels[currentClip].length + 5000);   
+}
 
-    setTimeout(videoScreen.toggleOn, 2000);
+function nextViewAngle()
+{
+    setTimeout(function() {setCameraAngle(0);}, 0);
+    setTimeout(function() {setCameraAngle(1);}, 20000);
+    setTimeout(function() {setCameraAngle(2);}, 40000);
+    setTimeout(function() {setCameraAngle(0);}, 50000);
+    setTimeout(function() {setCameraAngle(3);}, 60000);
+    setTimeout(nextViewAngle, 85000);
+}
 
-    
+function setCameraAngle(angle)
+{
+    camPosTarget = new THREE.Vector3(camAngles[angle].x, camAngles[angle].y, camAngles[angle].z);
+    camTargetTarget = new THREE.Vector3(camAngles[angle].tx, camAngles[angle].ty, camAngles[angle].tz);
+}
+
+function resetObject()
+{
+    testObject.reset();
+    videoScreen.prevFrame = null;    
+}
+
+function screenToggle()
+{
+    remote.onoff.handleMouseDown();
+    remote.onoff.handleMouseUp();
+}
+
+function selectChannel()
+{
+    remote.buttons[currentClip].handleMouseDown();
+    remote.buttons[currentClip].handleMouseUp();
 }
 
 function onKeyUp(evt)

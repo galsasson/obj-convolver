@@ -24,7 +24,7 @@ function ShapeParticle(restPos, dir, mappingIndex)
 		this.vertices.push(vert);
 	}
 
-	this.goback = function()
+	this.reset = function()
 	{
 		this.displace = 0;
 	}

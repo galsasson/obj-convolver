@@ -79,12 +79,14 @@ VideoScreen.prototype.toggleOn = function()
 
 VideoScreen.prototype.turnOn = function()
 {
+	this.on = true;
 	this.led.material.emissive = new THREE.Color(0xff4444);
 	this.setVideoSource(this.source);
 }
 
 VideoScreen.prototype.turnOff = function()
 {
+	this.on = false;
 	this.led.material.emissive = new THREE.Color(0x0);
 	screenLight.color = new THREE.Color(0x0);
 	if (this.stream != null) {
