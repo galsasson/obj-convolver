@@ -24,6 +24,11 @@ function ShapeParticle(restPos, dir, mappingIndex)
 		this.vertices.push(vert);
 	}
 
+	this.goback = function()
+	{
+		this.displace = 0;
+	}
+
 	this.isEquals = function(otherPar)
 	{
 		return this.restPos.equals(otherPar.restPos);

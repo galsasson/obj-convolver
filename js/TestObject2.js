@@ -76,6 +76,27 @@ TestObject2.prototype.update = function()
 	// console.log(max);
 }
 
+TestObject2.prototype.reset = function()
+{
+	for (var i=0; i<this.extrusionFaces.length*3; i++)
+	{
+		mappingData[i] = 0;
+	}
+
+	// update shape
+	for (var i=0; i<this.shapeParticles.length; i++)
+	{
+		shapeMappingData[i] = 0;
+		this.shapeParticles[i].goback();		
+	}
+
+	// update extruded triangles
+	for (var i=0; i<this.particles.length; i++)
+	{
+		this.particles[i].goback();
+	}
+}
+
 
 TestObject2.prototype.extrudeTriangles = function(geo)
 {

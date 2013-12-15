@@ -40,5 +40,10 @@ function Particle(pos, restPos, dir, mappingIndex)
 			this.pos.addVectors(this.restPos.clone(), this.direction.clone().multiplyScalar(this.staticLength+this.length));
 		// }
 
-	}	
+	}
+
+	this.goback = function()
+	{
+		this.staticLength = 0.2;
+	}
 }

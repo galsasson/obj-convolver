@@ -15,8 +15,9 @@ RemoteControl = function()
 					 "videos/crazy.mp4",
 					 "videos/xx.mp4",
 					 "videos/goodbye_blue_sky.mp4",
-					 // "videos/stuck_in_the_middle.mp4",
-					 "videos/itzhak_perlman_winter.mp4"];
+					 "videos/stuck_in_the_middle.mp4",
+					 //"videos/itzhak_perlman_winter.mp4"
+					 ];
 }
 RemoteControl.prototype = Object.create(THREE.Object3D.prototype);
 

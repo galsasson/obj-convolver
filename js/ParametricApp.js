@@ -321,6 +321,23 @@ function onKeyDown(evt)
     else if (keyCode == 77) {   // 'm'
         testObject.toggleFaceMovement();
     }
+    else if (keyCode == 82) {   // 'r'
+        testObject.reset();
+        nextClip();
+    }
+}
+
+var currentClip = 0;
+
+function nextClip()
+{
+    currentClip++;
+
+    // videoScreen.turnOff();
+
+    setTimeout(videoScreen.toggleOn, 2000);
+
+    
 }
 
 function onKeyUp(evt)
