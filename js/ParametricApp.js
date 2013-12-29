@@ -64,11 +64,11 @@ function onLoad()
     camera = new THREE.PerspectiveCamera( 20, 
         window.innerWidth / window.innerHeight, 1, 10000 );
         
-    camera.position.set(1115, 373, 1282);
+    camera.position.set(camAngles[0].x, camAngles[0].y, camAngles[0].z);
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener( 'change', render );
     // console.log(controls);
-    controls.target.set(154, 115, 337);
+    controls.target.set(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
 
     // add lights
     initSceneLights();
@@ -241,13 +241,13 @@ function run()
 
     // change camera view angles
     if (camPosTarget != null) {
-        camera.position.lerp(camPosTarget, 0.01);
+        camera.position.lerp(camPosTarget, 0.1);
         if (camPosTarget.clone().sub(camera.position).length() < 0.1) {
             camPosTarget = null;
         }
     }
     if (camTargetTarget != null) {
-        controls.target.lerp(camTargetTarget, 0.01);
+        controls.target.lerp(camTargetTarget, 0.1);
         if (camTargetTarget.clone().sub(controls.target).length() < 0.1) {
             camTargetTarget = null;
         }
