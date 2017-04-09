@@ -19,7 +19,7 @@ ResourceManager.prototype.initMaterials = function()
 	this.materials.walls = new THREE.MeshLambertMaterial( { color: 0xE6D283, ambient: 0xE6D283 } );
 
 	// this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x030303, specular: 0xc0c0c0, shininess: 25 } );
-	this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0x050505, specular: 0xc0c0c0, shininess: 50 } );
+	this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0xffffff, specular: 0xffffff, shininess: 150 } );
 	this.materials.object.shading = THREE.FlatShading;
 
 	this.materials.red = new THREE.MeshLambertMaterial( { color: 0xaa0000, ambient: 0xaa0000 } );
@@ -81,7 +81,7 @@ ResourceManager.prototype.loadResources = function(whenFinished)
 
     //     resMgr.models.sofa = object;
     //     resMgr.models.sofa.scale.set(0.1, 0.1, 0.1);
-    // });	
+    // });
 }
 
 ResourceManager.prototype.initShader = function()
@@ -115,7 +115,7 @@ ResourceManager.prototype.initShader = function()
 	}
 
 
-	var vertexProgram = 
+	var vertexProgram =
 		"uniform float time;" +
 		"attribute float size;" +
 		"attribute vec3 pcolor;" +
@@ -136,7 +136,7 @@ ResourceManager.prototype.initShader = function()
 		"	gl_Position = projectionMatrix * mvPosition;" +
 		"}";
 
-	var fragmentProgram = 
+	var fragmentProgram =
 		"uniform sampler2D texture;" +
 		"uniform float ugreen;" +
 		"varying vec3 vColor;" +
@@ -149,13 +149,13 @@ ResourceManager.prototype.initShader = function()
 		"vec3 light = vec3(0.5,0.2,1.0);" +
   		"light = normalize(light);" +
   		"float dProd = max(0.0, dot(vNormal, light));" +
-  		"gl_FragColor = vec4(dProd, dProd, dProd, 1.0);" + 
+  		"gl_FragColor = vec4(dProd, dProd, dProd, 1.0);" +
 //		"	gl_FragColor = vec4(0.0, vGreen, 0.7, 1.0);" +
 		"}";
 
 	console.log("vertex shader: " + document.getElementById('vertexshader').textContent);
 
-	this.materials.shader = new THREE.ShaderMaterial( 
+	this.materials.shader = new THREE.ShaderMaterial(
 	{
 		uniforms: uniforms,
 		attributes: attributes,

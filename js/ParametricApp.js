@@ -14,19 +14,9 @@ var keyPressed = [];
 
 var exporter = {};
 
-var room;
-var testObject = null;
-var videoScreen = null;
-var remote = null;
-
-// mapping between video and forcePerParticle
-var nParticles = 0;
-var mappingData = [];
-var shapeMappingData = [];
+var ring = null;
 
 var spotLight;
-var roomSpotLight;
-var screenLight;
 
 var pressedObjects = [];
 
@@ -50,7 +40,7 @@ function onLoad()
     var container = document.getElementById("container");
 
     // Create the Three.js renderer, add it to our div
-    renderer = new THREE.WebGLRenderer( { antialias: true } );    
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0);
     renderer.shadowMapEnabled = true;
@@ -61,9 +51,9 @@ function onLoad()
     scene = new THREE.Scene();
 
     // Put in a camera
-    camera = new THREE.PerspectiveCamera( 20, 
+    camera = new THREE.PerspectiveCamera( 20,
         window.innerWidth / window.innerHeight, 1, 10000 );
-        
+
     camera.position.set(camAngles[0].x, camAngles[0].y, camAngles[0].z);
     controls = new THREE.OrbitControls(camera);
     controls.addEventListener( 'change', render );
@@ -74,7 +64,9 @@ function onLoad()
     initSceneLights();
 
     // load resources (after all resouces will load, calls populateScene)
-    loadResources(populateScene);
+    // loadResources(populateScene);
+    loadResources(function (){});
+    populateScene();
 
     // Add a mouse up handler to toggle the animation
     addInputHandler();
@@ -113,9 +105,9 @@ function initSceneLights()
     scene.add( ambLight );
 
     // object spotlight
-    spotLight = new THREE.SpotLight(0xFFFFEE, 1);
+    spotLight = new THREE.SpotLight(0xFFFFFF, 1);
     spotLight.angle = Math.PI/2;
-    spotLight.exponent = 30;
+    spotLight.exponent = 12;
     spotLight.position.set(-200, 337, 1015);
     spotLight.target.position.set(-98, 82, 522);
     spotLight.castShadow = true;
@@ -124,6 +116,7 @@ function initSceneLights()
     scene.add(spotLight);
 
     // screen spotlight
+    /*
     screenLight = new THREE.SpotLight(0x000000, 3.5);
     screenLight.angle = 0.27;
     screenLight.exponent = 103;
@@ -139,6 +132,7 @@ function initSceneLights()
     spot2.position.set(0, 2000, 200);
     spot2.target.position.set(0, 0, 200);
     scene.add(spot2);
+    */
 }
 
 //***************************************************************************//
@@ -146,38 +140,28 @@ function initSceneLights()
 //***************************************************************************//
 function populateScene()
 {
-
-    room = new Room();
-    room.init();
-    scene.add(room);
-
-    testObject = new TestObject2();
-    testObject.init();
-    testObject.rotation.x = Math.PI/2;
-    testObject.position.set(0, 80, 500);
-    scene.add(testObject);
-
-    videoScreen = new VideoScreen();
-    videoScreen.init();
-    videoScreen.position.set(0, 120, -280);
-    scene.add(videoScreen);
-
-    remote = new RemoteControl();
-    remote.init();
-    remote.rotation.x = 0.37;
-    remote.position.set(120, 29, 560);
-    scene.add(remote);
-
+    ring = new RingBling();
+    ring.init();
+    // ring.rotation.x = Math.PI/2;
+    ring.position.set(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
+    scene.add(ring);
 }
 
 function addGui()
 {
-    // var gui = new dat.GUI();
-    // gui.add(screenLight, 'angle', 0, 3.14);
-    // gui.add(screenLight, 'exponent', 0, 500);
-    // gui.add(screenLight, 'intensity', 0, 4);
+    var gui = new dat.GUI();
+    gui.add(spotLight, 'angle', 0, 3.14);
+    gui.add(spotLight, 'exponent', 0, 90);
+    gui.add(spotLight, 'intensity', 0, 4);
     // f.add(remote.position, 'z', 400, 700);
     // gui.add(remote.rotation, 'x', 0, Math.PI/6);
+
+    var ringG = gui.addFolder("RING");
+    ringG.add(ring, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});//ring.updateGeometry());
+    ringG.add(ring, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring, 'extrude', 0, 10).onChange(function() {ring.updateGeometry(ring)});
 /*
     var f4 = f1.addFolder('EYE GEOMETRY');
     f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
@@ -229,13 +213,8 @@ function run()
 
     if (animating)
     {
-        if (videoScreen) {
-            videoScreen.update();
-            videoScreen.processVideo();
-        }
-
-        if (testObject) {
-            testObject.update();
+        if (ring) {
+            ring.update();
         }
     }
 
@@ -261,7 +240,7 @@ function run()
 // Render the scene
 function render()
 {
-    renderer.render(scene, camera);    
+    renderer.render(scene, camera);
 }
 
 //***************************************************************************//
@@ -290,7 +269,7 @@ function onKeyDown(evt)
         else {
             videoScreen.video.play();
         }
-        animating = !animating;        
+        animating = !animating;
     }
     else if (keyCode >= 48 &&
              keyCode < 48+camAngles.length) {
@@ -308,17 +287,17 @@ function onKeyDown(evt)
             keyPressed[keyCode] = true;
             // export to STL
             console.log("exporting stl");
-            testObject.updateMatrixWorld(true);
+            ring.updateMatrixWorld(true);
             exporter = new THREE.STLExporter();
-            exporter.exportScene(testObject);
+            exporter.exportScene(ring);
             exporter.sendToServer();
         // }
     }
     else if (keyCode == 70) {   // 'f'
-        testObject.toggleFaces();
+        ring.toggleFaces();
     }
     else if (keyCode == 77) {   // 'm'
-        testObject.toggleFaceMovement();
+        ring.toggleFaceMovement();
     }
     else if (keyCode == 82) {   // 'r'
         resetObject();
@@ -345,7 +324,7 @@ function nextClip()
     setTimeout(resetObject, 200);
     setTimeout(selectChannel, 400);
     setTimeout(screenToggle, 600);
-    setTimeout(nextClip, remote.channels[currentClip].length + 5000);   
+    setTimeout(nextClip, remote.channels[currentClip].length + 5000);
 }
 
 function nextViewAngle()
@@ -366,20 +345,15 @@ function setCameraAngle(angle)
 
 function resetObject()
 {
-    testObject.reset();
-    videoScreen.prevFrame = null;    
+    ring.reset();
 }
 
 function screenToggle()
 {
-    remote.onoff.handleMouseDown();
-    remote.onoff.handleMouseUp();
 }
 
 function selectChannel()
 {
-    remote.buttons[currentClip].handleMouseDown();
-    remote.buttons[currentClip].handleMouseUp();
 }
 
 function onKeyUp(evt)
@@ -406,6 +380,8 @@ function onMouseDown(event)
     projector.unprojectVector( vector, camera );
 
     var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize(), 0, 2000);
+
+    /*
     var intersections = ray.intersectObject(remote, true);
     if (intersections.length == 0) {
         return;
@@ -415,8 +391,9 @@ function onMouseDown(event)
     if (object.handleMouseDown != null)
     {
         object.handleMouseDown();
-        pressedObjects.push(object);        
+        pressedObjects.push(object);
     }
+    */
 
     // console.log(result);
 }
@@ -447,7 +424,7 @@ function onMouseMove(event)
     }
 }
 
-function onWindowResize() 
+function onWindowResize()
 {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -457,7 +434,7 @@ function onWindowResize()
 
 function getKeyCode(evt)
 {
-    if (window.event != null) 
+    if (window.event != null)
         return window.event.keyCode;
     else
         return evt.which;
