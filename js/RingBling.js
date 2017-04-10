@@ -23,8 +23,8 @@ RingBling.prototype.updateGeometry = function(that)
 	that.ringr.updateGeometry(that.ringr);
 
 	// put rings end to end
-	that.ringl.translateZ(that.ringl.stride/2);
-	that.ringr.translateZ(that.ringr.stride/2);
+	that.ringl.position.set(0, 0, that.ringl.stride/2);
+	that.ringr.position.set(0, 0, that.ringr.stride/2);
 }
 
 

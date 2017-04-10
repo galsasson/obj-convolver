@@ -17,24 +17,7 @@ Ring.prototype = Object.create(THREE.Object3D.prototype);
 
 Ring.prototype.init = function()
 {
-	var detail = 2;
-	if (highRes) {
-		detail = 3;
-	}
-
-	// this.geo = new THREE.OctahedronGeometry( this.size, detail );
-	// this.geo = new THREE.TetrahedronGeometry( 20, 3 );
-	// this.geo = new THREE.SphereGeometry(20, 12, 12);
-	// this.geo = new THREE.CylinderGeometry( 20, 20, 50, 18, 18, false);
-	// this.geo = new THREE.CubeGeometry( 20, 20, 20, 12, 12, 12);
-	// this.geo = new THREE.PlaneGeometry( 40, 40, 12, 12 );
-	// this.geo = new THREE.TorusGeometry( 10, 3, 16, 100 );
-	// this.extrudeTriangles(this.geo);
 	this.updateGeometry(this);
-
-	// console.log("number of faces in object: " + this.extrusionFaces.length + ", number of points: " + this.extrusionFaces.length*3);
-	// console.log("number of shape particles: " + this.shapeParticles.length);
-	// console.log("number of face particles: " + this.particles.length);
 }
 
 Ring.prototype.updateGeometry = function(that)
@@ -52,14 +35,12 @@ Ring.prototype.updateGeometry = function(that)
 
 Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubularSegments, arc, extrude, stride)
 {
-	console.log("updaing geomerty");
 	var geo = new THREE.TorusGeometry(radius, thickness, radialSegments, tubularSegments, arc);
 	// get maximum z
 	var maxZ=-99999;
 	var maxY=-99999;
 	geo.vertices.forEach(function(item, index) {
 		if (item.z > maxZ) { maxZ = item.z; };
-		if (item.y < radius && item.y > -radius && item.y > maxY) { maxY = item.y; };
 	});
 	var factor = (thickness+extrude)/maxZ;
 	var zero = new THREE.Vector3(0,0,0);
@@ -76,7 +57,9 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 		}
 
 		// make stride
-		var yCoeff = item.y/maxY;
+		// var yCoeff = item.y/maxY;
+		// console.log("maxY = " + maxY);
+		var yCoeff = item.y/(radius+thickness);
 		item.z += yCoeff*(stride/2);
 
 		// make stride (keep top and bottom)
