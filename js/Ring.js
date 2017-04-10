@@ -1,34 +1,107 @@
-RingBling = function()
+Ring = function()
 {
 	THREE.Object3D.call(this);
 
-	this.ringl = null;
-	this.ringr = null;
+	this.radius = 8;
+	this.thickness = 2.5;
+	this.radialSegments = 32;
+	this.tubularSegments = 100;
+	this.extrude = 0;
+	this.flaten = 0;
+	this.stride = 0;
+	this.showFaces = true;
+	this.showFaceMovement = true;
+	this.mesh = null;
 }
-RingBling.prototype = Object.create(THREE.Object3D.prototype);
+Ring.prototype = Object.create(THREE.Object3D.prototype);
 
-RingBling.prototype.init = function()
+Ring.prototype.init = function()
 {
-	this.ringl = new Ring();
-	this.ringl.init();
-	this.ringr = new Ring();
-	this.ringr.init();
-	this.add(this.ringl);
-	this.add(this.ringr);
+	var detail = 2;
+	if (highRes) {
+		detail = 3;
+	}
+
+	// this.geo = new THREE.OctahedronGeometry( this.size, detail );
+	// this.geo = new THREE.TetrahedronGeometry( 20, 3 );
+	// this.geo = new THREE.SphereGeometry(20, 12, 12);
+	// this.geo = new THREE.CylinderGeometry( 20, 20, 50, 18, 18, false);
+	// this.geo = new THREE.CubeGeometry( 20, 20, 20, 12, 12, 12);
+	// this.geo = new THREE.PlaneGeometry( 40, 40, 12, 12 );
+	// this.geo = new THREE.TorusGeometry( 10, 3, 16, 100 );
+	// this.extrudeTriangles(this.geo);
+	this.updateGeometry(this);
+
+	// console.log("number of faces in object: " + this.extrusionFaces.length + ", number of points: " + this.extrusionFaces.length*3);
+	// console.log("number of shape particles: " + this.shapeParticles.length);
+	// console.log("number of face particles: " + this.particles.length);
 }
 
-RingBling.prototype.updateGeometry = function(that)
+Ring.prototype.updateGeometry = function(that)
 {
-	that.ringl.updateGeometry(that.ringl);
-	that.ringr.updateGeometry(that.ringr);
-
-	// put rings end to end
-	that.ringl.translateZ(that.ringl.stride/2);
-	that.ringr.translateZ(that.ringr.stride/2);
+	console.log("radius: " + that.radius);
+	that.geo = that.RingGeometry(that.radius, that.thickness, that.radialSegments, that.tubularSegments, Math.PI*2, that.extrude, that.stride);
+	if (that.mesh != null) {
+		that.remove(that.mesh);
+	}
+	that.mesh = new THREE.Mesh(that.geo, resMgr.materials.object);
+	that.mesh.castShadow = true;
+	that.mesh.receiveShadow = false;
+	this.add(that.mesh);
 }
 
+Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubularSegments, arc, extrude, stride)
+{
+	console.log("updaing geomerty");
+	var geo = new THREE.TorusGeometry(radius, thickness, radialSegments, tubularSegments, arc);
+	// get maximum z
+	var maxZ=-99999;
+	var maxY=-99999;
+	geo.vertices.forEach(function(item, index) {
+		if (item.z > maxZ) { maxZ = item.z; };
+		if (item.y < radius && item.y > -radius && item.y > maxY) { maxY = item.y; };
+	});
+	var factor = (thickness+extrude)/maxZ;
+	var zero = new THREE.Vector3(0,0,0);
+	geo.vertices.forEach(function(item, index) {
+		// strech z
+		item.z *= factor;
 
-RingBling.prototype.update = function()
+		// flatten below radius
+		var item2d = new THREE.Vector3(item.x, item.y, 0);
+		if (zero.distanceTo(item2d) < radius) {
+			item2d.setLength(radius);
+			item.x = item2d.x;
+			item.y = item2d.y;
+		}
+
+		// make stride
+		var yCoeff = item.y/maxY;
+		item.z += yCoeff*(stride/2);
+
+		// make stride (keep top and bottom)
+		/*
+		if (item.y < radius && item.y > -radius) {
+			var yCoeff = item.y/maxY;
+			item.z += yCoeff*(stride/2);
+		}
+		else {
+			item.z += (item.y>0)?stride/2:-stride/2;
+		}
+		*/
+
+
+
+	});
+	geo.computeFaceNormals();
+	geo.computeVertexNormals();
+
+	geo.verticesNeedUpdate = true;
+	geo.normalsNeedUpdate = true;
+	return geo;
+}
+
+Ring.prototype.update = function()
 {
 	// update shape
 	/*
@@ -69,7 +142,7 @@ RingBling.prototype.update = function()
 	*/
 }
 
-RingBling.prototype.reset = function()
+Ring.prototype.reset = function()
 {
 	/*
 	// update shape
@@ -89,7 +162,7 @@ RingBling.prototype.reset = function()
 }
 
 
-RingBling.prototype.extrudeTriangles = function(geo)
+Ring.prototype.extrudeTriangles = function(geo)
 {
 
 	var faces = geo.faces;
@@ -131,7 +204,7 @@ RingBling.prototype.extrudeTriangles = function(geo)
 
 }
 
-RingBling.prototype.extrudeFace = function(index, faces, vertices)
+Ring.prototype.extrudeFace = function(index, faces, vertices)
 {
 	var geo = new THREE.Geometry();
 
@@ -184,12 +257,12 @@ RingBling.prototype.extrudeFace = function(index, faces, vertices)
 	return geo;
 }
 
-RingBling.prototype.makeIntoNeckless = function()
+Ring.prototype.makeIntoNeckless = function()
 {
 	var torusGeo = new THREE.TorusGeometry( radius, tube, segmentsR, segmentsT, arc );
 }
 
-RingBling.prototype.getMax = function()
+Ring.prototype.getMax = function()
 {
 	//var max = new THREE.Vector3(0, 0, 0);
 	var max = 0;
@@ -218,7 +291,7 @@ RingBling.prototype.getMax = function()
 	}
 }
 
-RingBling.prototype.toggleFaces = function()
+Ring.prototype.toggleFaces = function()
 {
 	this.showFaces = !this.showFaces;
 	for (var i=1; i<this.children.length; i++)
@@ -227,7 +300,7 @@ RingBling.prototype.toggleFaces = function()
 	}
 }
 
-RingBling.prototype.toggleFaceMovement = function()
+Ring.prototype.toggleFaceMovement = function()
 {
 	this.showFaceMovement = !this.showFaceMovement;
 }

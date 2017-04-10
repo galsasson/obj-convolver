@@ -24,7 +24,7 @@ var reversedScale = 1;
 
 var highRes = true;
 
-var camAngles = [{'x': 88.2, 'y':107.7, 'z':923.8, 'tx':45.5, 'ty':69.9, 'tz':483.5},
+var camAngles = [{'x': -48, 'y':78, 'z':540, 'tx':45.5, 'ty':69.9, 'tz':483.5},
                  {'x': 1173.9, 'y':236.6, 'z':1538.5, 'tx':107.2, 'ty':109.7, 'tz':223.7},
                  {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500},
                  {'x': -871.9, 'y':576.4, 'z':1625.6, 'tx':55.8, 'ty':104, 'tz':172.9}
@@ -156,12 +156,21 @@ function addGui()
     // f.add(remote.position, 'z', 400, 700);
     // gui.add(remote.rotation, 'x', 0, Math.PI/6);
 
-    var ringG = gui.addFolder("RING");
-    ringG.add(ring, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});//ring.updateGeometry());
-    ringG.add(ring, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring, 'extrude', 0, 10).onChange(function() {ring.updateGeometry(ring)});
+    var ringG = gui.addFolder("RIGHT RING");
+    ringG.add(ring.ringr, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});//ring.updateGeometry());
+    ringG.add(ring.ringr, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr, 'extrude', -6, 10).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr, 'stride', 0, 50).onChange(function() {ring.updateGeometry(ring)});
+
+    var ringGL = gui.addFolder("LEFT RING");
+    ringGL.add(ring.ringl, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});//ring.updateGeometry());
+    ringGL.add(ring.ringl, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl, 'extrude', -6, 10).onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl, 'stride', -50, 0).onChange(function() {ring.updateGeometry(ring)});
 /*
     var f4 = f1.addFolder('EYE GEOMETRY');
     f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
