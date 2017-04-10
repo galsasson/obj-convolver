@@ -24,7 +24,7 @@ RingBling.prototype.updateGeometry = function(that)
 
 	// put rings end to end
 	that.ringl.position.set(0, 0, that.ringl.stride/2);
-	that.ringr.position.set(0, 0, that.ringr.stride/2);
+	that.ringr.position.set(0, that.ringr.radius-that.ringl.radius, that.ringr.stride/2);
 }
 
 

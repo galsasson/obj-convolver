@@ -150,14 +150,12 @@ function populateScene()
 function addGui()
 {
     var gui = new dat.GUI();
-    gui.add(spotLight, 'angle', 0, 3.14);
-    gui.add(spotLight, 'exponent', 0, 90);
-    gui.add(spotLight, 'intensity', 0, 4);
-    // f.add(remote.position, 'z', 400, 700);
-    // gui.add(remote.rotation, 'x', 0, Math.PI/6);
+    var lightG = gui.addFolder("LIGHT");
+    lightG.add(spotLight, 'exponent', 0, 90);
+    lightG.add(spotLight, 'intensity', 0, 4);
 
     var ringG = gui.addFolder("RIGHT RING");
-    ringG.add(ring.ringr, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});//ring.updateGeometry());
+    ringG.add(ring.ringr, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
     ringG.add(ring.ringr, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
     ringG.add(ring.ringr, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
     ringG.add(ring.ringr, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
@@ -165,7 +163,7 @@ function addGui()
     ringG.add(ring.ringr, 'stride', 0, 50).onChange(function() {ring.updateGeometry(ring)});
 
     var ringGL = gui.addFolder("LEFT RING");
-    ringGL.add(ring.ringl, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});//ring.updateGeometry());
+    ringGL.add(ring.ringl, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
     ringGL.add(ring.ringl, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
     ringGL.add(ring.ringl, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
     ringGL.add(ring.ringl, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});

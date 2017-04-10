@@ -22,6 +22,7 @@ ResourceManager.prototype.initMaterials = function()
 	this.materials.object = new THREE.MeshPhongMaterial( { ambient: 0xffffff, specular: 0xffffff, shininess: 150 } );
 	this.materials.object.shading = THREE.FlatShading;
 
+
 	this.materials.red = new THREE.MeshLambertMaterial( { color: 0xaa0000, ambient: 0xaa0000 } );
 	this.materials.green = new THREE.MeshLambertMaterial( { color: 0x00aa00, ambient: 0x00aa00 } );
 	this.materials.led = new THREE.MeshLambertMaterial( { color: 0x990000, ambient: 0x990000 } );
@@ -29,6 +30,9 @@ ResourceManager.prototype.initMaterials = function()
 	this.materials.rcstand = new THREE.MeshPhongMaterial( {color: 0xffffff, ambient: 0xffffff, specular: 0xffffff} );
 	this.materials.rcstand.shading = THREE.FlatShading;
 
+	// this.texture = new THREE.TextureLoader().load( "textures/sky.jpg" );
+	// console.log(this.texture);
+	// this.materials.ringr = new THREE.MeshPhongMaterial( { color: 0xffffff, specular:0xffffff, envMap: this.texture, combine: THREE.MultiplyOperation } );
 
 //	this.materials.sofa = new THREE.MeshLambertMaterial( { color: 0x85724E, ambient: 0x85724E } );
 
